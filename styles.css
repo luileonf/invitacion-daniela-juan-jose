@@ -231,24 +231,28 @@ a.button {
   text-transform: uppercase;
 }
 
-.opening.is-open .envelope-flap {
-  transform: rotateX(72deg) translateY(-28px);
-  transition: transform 900ms ease;
-}
-
-.opening.is-open {
+.opening[hidden] {
   display: none;
 }
 
-.opening.is-open .envelope-card-preview {
-  opacity: 1;
-  transform: translateY(-150px) rotate(-3deg);
-  transition: opacity 300ms ease 280ms, transform 900ms ease 260ms;
+.opening.is-opening .envelope-flap {
+  animation: openFlap 850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.opening.is-open .cover-copy,
-.opening.is-open .tap-note,
-.opening.is-open .wax-seal {
+.opening.is-opening .envelope-card-preview {
+  animation: invitationOut 2800ms cubic-bezier(0.2, 0.78, 0.2, 1) forwards;
+}
+
+.opening.is-opening .envelope-back,
+.opening.is-opening .envelope-left,
+.opening.is-opening .envelope-right,
+.opening.is-opening .envelope-pocket {
+  animation: envelopeLeave 740ms ease 2040ms forwards;
+}
+
+.opening.is-opening .cover-copy,
+.opening.is-opening .tap-note,
+.opening.is-opening .wax-seal {
   opacity: 0;
   transition: opacity 320ms ease;
 }
@@ -595,6 +599,50 @@ textarea {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes openFlap {
+  0% {
+    transform: rotateX(0deg) translateY(0);
+  }
+  100% {
+    transform: rotateX(74deg) translateY(-34px);
+  }
+}
+
+@keyframes invitationOut {
+  0% {
+    opacity: 0;
+    z-index: 3;
+    transform: translateY(90px) rotate(-4deg) scale(0.82);
+  }
+  18% {
+    opacity: 1;
+  }
+  48% {
+    z-index: 7;
+    transform: translateY(-82px) rotate(-2deg) scale(0.92);
+  }
+  76% {
+    opacity: 1;
+    transform: translateY(-190px) rotate(0deg) scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    z-index: 7;
+    transform: translateY(-214px) rotate(0deg) scale(1.14);
+  }
+}
+
+@keyframes envelopeLeave {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.94);
   }
 }
 
