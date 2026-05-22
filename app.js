@@ -85,10 +85,15 @@ function setupStory() {
   }
 
   openEnvelope.addEventListener("click", () => {
-    opening.classList.add("is-open");
-    opening.hidden = true;
-    story.classList.add("is-visible");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (opening.classList.contains("is-opening")) {
+      return;
+    }
+    opening.classList.add("is-opening");
+    window.setTimeout(() => {
+      opening.hidden = true;
+      story.classList.add("is-visible");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 2800);
   });
 
   prevButton.addEventListener("click", () => showCard(activeIndex - 1));
