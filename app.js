@@ -1,5 +1,6 @@
 const STORAGE_KEY = "danielaJuanJoseWeddingGuests";
 const DEFAULT_INVITATION_PASSES = 4;
+const ADMIN_PASSWORD = "Dani&JuanJoPorSiempre";
 const whatsappNumber = "5218710000000";
 
 const defaultGuests = [
@@ -178,20 +179,54 @@ function renderGuests() {
       const safeNote = escapeHtml(guest.note || "");
       const safeUrl = escapeHtml(url);
       return `
-        <article class="guest-card">
+        <article class="guest-card" data-index="${index}">
           <div>
             <h3>${safeName}</h3>
             <p>${pluralizePerson(normalizePasses(guest.passes))}${safeNote ? ` · ${safeNote}` : ""}</p>
           </div>
           <div class="guest-url" title="${safeUrl}">${safeUrl}</div>
-          <button class="copy-link" type="button" data-index="${index}">Copiar link</button>
+          <div class="guest-card-actions">
+            <button class="copy-link" type="button" data-index="${index}">Copiar link</button>
+            <button class="edit-guest" type="button" data-index="${index}">Editar</button>
+          </div>
         </article>
       `;
     })
     .join("");
 }
 
+function renderGuestEditor(index) {
+  const guests = readGuests();
+  const guest = guests[index];
+  const card = document.querySelector(`.guest-card[data-index="${index}"]`);
+  if (!guest || !card) {
+    return;
+  }
+
+  card.classList.add("is-editing");
+  card.innerHTML = `
+    <label>
+      Nombre del invitado
+      <input class="edit-name" type="text" value="${escapeHtml(guest.name)}" />
+    </label>
+    <label>
+      Añadidos / pases
+      <input class="edit-passes" type="number" min="1" value="${normalizePasses(guest.passes)}" />
+    </label>
+    <label>
+      Nota opcional
+      <input class="edit-note" type="text" value="${escapeHtml(guest.note || "")}" />
+    </label>
+    <div class="guest-card-actions">
+      <button class="save-guest" type="button" data-index="${index}">Guardar</button>
+      <button class="cancel-edit" type="button">Cancelar</button>
+    </div>
+  `;
+}
+
 function setupAdmin() {
+  const openAdmin = document.querySelector("#openAdmin");
+  const adminPanel = document.querySelector("#adminPanel");
   const form = document.querySelector("#guestForm");
   const csvInput = document.querySelector("#csvInput");
   const pasteArea = document.querySelector("#pasteArea");
@@ -200,6 +235,18 @@ function setupAdmin() {
   const downloadCsv = document.querySelector("#downloadCsv");
   const clearGuests = document.querySelector("#clearGuests");
   const guestList = document.querySelector("#guestList");
+
+  openAdmin.addEventListener("click", () => {
+    const password = window.prompt("Contraseña del panel de novios");
+    if (password === ADMIN_PASSWORD) {
+      adminPanel.hidden = false;
+      adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (password !== null) {
+      window.alert("Contraseña incorrecta.");
+    }
+  });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -233,16 +280,43 @@ function setupAdmin() {
   });
 
   guestList.addEventListener("click", async (event) => {
-    const button = event.target.closest(".copy-link");
-    if (!button) {
+    const copyButton = event.target.closest(".copy-link");
+    const editButton = event.target.closest(".edit-guest");
+    const saveButton = event.target.closest(".save-guest");
+    const cancelButton = event.target.closest(".cancel-edit");
+
+    if (copyButton) {
+      const guest = readGuests()[Number(copyButton.dataset.index)];
+      await copyText(createGuestUrl(guest));
+      copyButton.textContent = "Copiado";
+      setTimeout(() => {
+        copyButton.textContent = "Copiar link";
+      }, 1400);
       return;
     }
-    const guest = readGuests()[Number(button.dataset.index)];
-    await copyText(createGuestUrl(guest));
-    button.textContent = "Copiado";
-    setTimeout(() => {
-      button.textContent = "Copiar link";
-    }, 1400);
+
+    if (editButton) {
+      renderGuestEditor(Number(editButton.dataset.index));
+      return;
+    }
+
+    if (saveButton) {
+      const index = Number(saveButton.dataset.index);
+      const card = saveButton.closest(".guest-card");
+      const guests = readGuests();
+      guests[index] = {
+        name: card.querySelector(".edit-name").value.trim(),
+        passes: normalizePasses(card.querySelector(".edit-passes").value),
+        note: card.querySelector(".edit-note").value.trim(),
+      };
+      saveGuests(guests.filter((guest) => guest.name));
+      renderGuests();
+      return;
+    }
+
+    if (cancelButton) {
+      renderGuests();
+    }
   });
 
   copyAllLinks.addEventListener("click", async () => {
