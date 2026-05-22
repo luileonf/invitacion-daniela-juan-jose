@@ -504,6 +504,16 @@ h2 {
   cursor: not-allowed;
 }
 
+.admin-access {
+  display: grid;
+  place-items: center;
+  margin: 34px auto 0;
+}
+
+.admin-open {
+  min-width: min(280px, 100%);
+}
+
 .admin-panel {
   width: min(980px, 100%);
   margin: 34px auto 0;
@@ -513,11 +523,13 @@ h2 {
   box-shadow: 0 18px 52px rgba(34, 29, 22, 0.08);
 }
 
-.admin-panel summary {
+.admin-panel[hidden] {
+  display: none;
+}
+
+.admin-heading h2 {
+  margin: 0 0 10px;
   color: var(--green);
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: 600;
 }
 
 .admin-panel p {
@@ -575,6 +587,10 @@ textarea {
   background: rgba(255, 255, 255, 0.48);
 }
 
+.guest-card.is-editing {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+}
+
 .guest-card h3,
 .guest-card p {
   margin: 0;
@@ -585,6 +601,13 @@ textarea {
   color: var(--muted);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.guest-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .empty-state {
@@ -677,7 +700,8 @@ textarea {
   .parents-grid,
   .rsvp-actions,
   .admin-grid,
-  .guest-card {
+  .guest-card,
+  .guest-card.is-editing {
     grid-template-columns: 1fr;
   }
 
