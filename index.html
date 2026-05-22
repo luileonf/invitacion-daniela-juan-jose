@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daniela & Juan José | Invitación</title>
-    <link rel="stylesheet" href="./styles.css?v=5" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=6" />
   </head>
   <body>
     <main class="experience" id="inicio">
@@ -12,6 +18,9 @@
         <button class="envelope-button" id="openEnvelope" type="button">
           <span class="tap-note">Toca para abrir</span>
           <span class="envelope" aria-hidden="true">
+            <span class="envelope-liner">
+              <span class="botanical-mark"></span>
+            </span>
             <span class="envelope-card-preview"></span>
             <span class="envelope-back"></span>
             <span class="envelope-flap"></span>
@@ -22,6 +31,7 @@
           </span>
           <span class="cover-copy">
             <span>D&J</span>
+            <i aria-hidden="true"></i>
             <strong id="coverGuestName">Invitado especial</strong>
           </span>
         </button>
@@ -31,6 +41,7 @@
         <div class="story-shell">
           <article class="story-card invitation-card is-active" data-step="0">
             <div class="embossed-frame">
+              <div class="card-ornament top" aria-hidden="true"></div>
               <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
               <div class="parents-grid">
                 <p>Juan José Solórzano<br />Karla Monroy</p>
@@ -42,11 +53,13 @@
               <p class="time-line">Hora por confirmar</p>
               <p class="place-line">Finca Shangrila</p>
               <p class="address">Avenida Hincapié KM 11.5, Guatemala</p>
+              <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
 
           <article class="story-card reception-card" data-step="1">
             <div class="embossed-frame">
+              <div class="card-ornament top" aria-hidden="true"></div>
               <p class="script-label">Ceremonia y recepción</p>
               <h2>Finca Shangrila</h2>
               <p>Avenida Hincapié KM 11.5, Guatemala</p>
@@ -58,22 +71,26 @@
                 <span>Esta invitación es válida para</span>
                 <strong id="passCount">4 personas</strong>
               </div>
+              <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
 
           <article class="story-card registry-card" data-step="2">
             <div class="embossed-frame">
+              <div class="card-ornament top" aria-hidden="true"></div>
               <p class="script-label">Lluvia de sobres</p>
               <h2>Su presencia en este día tan especial es nuestro mayor regalo</h2>
               <p>
                 Si desean tener un detalle con nosotros, agradeceremos que sea en efectivo
                 para ayudarnos a iniciar esta nueva etapa juntos.
               </p>
+              <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
 
           <article class="story-card rsvp-card" data-step="3">
             <div class="embossed-frame">
+              <div class="card-ornament top" aria-hidden="true"></div>
               <p class="script-label">Confirmación de asistencia</p>
               <h2>¿Nos acompañas?</h2>
               <p class="valid-for">Invitación para <strong id="confirmationPassCount">4 personas</strong></p>
@@ -82,6 +99,7 @@
                 <a class="button secondary" id="noRsvpLink" href="#" target="_blank" rel="noreferrer">No podré asistir</a>
               </div>
               <p class="deadline">Favor confirmar antes del 15 de junio.</p>
+              <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
 
@@ -146,6 +164,6 @@
       </section>
     </main>
 
-    <script src="./app.js?v=5"></script>
+    <script src="./app.js?v=6"></script>
   </body>
 </html>
