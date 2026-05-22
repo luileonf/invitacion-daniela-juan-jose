@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daniela & Juan José | Invitación</title>
-    <link rel="stylesheet" href="./styles.css?v=4" />
+    <link rel="stylesheet" href="./styles.css?v=5" />
   </head>
   <body>
     <main class="experience" id="inicio">
@@ -93,12 +93,18 @@
         </div>
       </section>
 
-      <details class="admin-panel" id="admin">
-        <summary>Panel de novios: crear links personalizados</summary>
-        <p>
-          Pueden pegar una lista desde Excel, subir un CSV o capturar invitados uno por uno.
-          Columnas sugeridas: nombre, pases, nota.
-        </p>
+      <section class="admin-access" id="admin">
+        <button class="admin-open" id="openAdmin" type="button">Panel de novios</button>
+      </section>
+
+      <section class="admin-panel" id="adminPanel" hidden>
+        <div class="admin-heading">
+          <h2>Panel de novios</h2>
+          <p>
+            Pueden pegar una lista desde Excel, subir un CSV o capturar invitados uno por uno.
+            Columnas sugeridas: nombre, pases, nota.
+          </p>
+        </div>
 
         <div class="admin-grid">
           <form class="manual-form" id="guestForm" autocomplete="off">
@@ -137,9 +143,9 @@
         </div>
 
         <div class="guest-list" id="guestList" aria-live="polite"></div>
-      </details>
+      </section>
     </main>
 
-    <script src="./app.js?v=4"></script>
+    <script src="./app.js?v=5"></script>
   </body>
 </html>
