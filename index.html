@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daniela & Juan José | Invitación</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Inicio">D&J</a>
+      <nav aria-label="Secciones de la invitación">
+        <a href="#ceremonia">Boda</a>
+        <a href="#recepcion">Recepción</a>
+        <a href="#regalos">Mesa de regalos</a>
+        <a href="#confirmar">Confirmar</a>
+      </nav>
+      <a class="admin-link" href="#admin">Novios</a>
+    </header>
+
+    <main id="inicio">
+      <section class="hero invitation-card" aria-labelledby="coupleNames">
+        <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
+
+        <div class="parents-grid" aria-label="Padres de los novios">
+          <p>Nombres de los papás de ella</p>
+          <p>Nombres de los papás de él</p>
+        </div>
+
+        <h1 id="coupleNames">Daniela <span>&</span> Juan José</h1>
+
+        <p class="guest-line" id="guestGreeting">Tenemos el honor de invitarlos a celebrar</p>
+        <p class="invitation-copy">
+          nuestro matrimonio el próximo<br />
+          <strong>Sábado 30 de agosto de 2026</strong><br />
+          hora por confirmar
+        </p>
+
+        <div class="pass-card" id="passCard">
+          <span>Invitación para</span>
+          <strong id="passCount">1 persona</strong>
+        </div>
+
+        <p class="city">Finca Shangrila · Guatemala</p>
+      </section>
+
+      <section id="ceremonia" class="detail-section">
+        <div class="section-kicker">Ceremonia</div>
+        <div>
+          <h2>Finca Shangrila</h2>
+          <p>Avenida Hincapié KM 11.5, Guatemala · Hora por confirmar</p>
+          <a class="text-link" href="https://maps.google.com/?q=Finca+Shangrila+Avenida+Hincapie+KM+11.5+Guatemala" target="_blank" rel="noreferrer">
+            Abrir ubicación en Google Maps
+          </a>
+        </div>
+      </section>
+
+      <section id="recepcion" class="detail-section reception">
+        <div class="section-kicker">Recepción</div>
+        <div>
+          <h2>Ceremonia y recepción</h2>
+          <p>En el mismo lugar</p>
+          <p class="dress-code">Esta invitación es válida para<br /><span id="receptionPassCount">(4 personas)</span></p>
+        </div>
+      </section>
+
+      <section id="regalos" class="registry-section">
+        <div class="wax-seal" aria-hidden="true"></div>
+        <div>
+          <p class="script-label">Mesa de regalos</p>
+          <h2>Su compañía es el regalo más importante para nosotros</h2>
+          <p class="registry-copy">
+            Si desean tener un detalle en esta nueva etapa, una contribución en efectivo
+            será recibida con mucho cariño.
+          </p>
+          <dl>
+            <div>
+              <dt>Transferencia</dt>
+              <dd>Banamex</dd>
+            </div>
+            <div>
+              <dt>CLABE</dt>
+              <dd>002 320 701 120 6514 123 8</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="confirmar" class="rsvp-section">
+        <p class="script-label">Confirmación de asistencia</p>
+        <h2>Confirmación de asistencia</h2>
+        <p class="valid-for">Esta invitación es válida para <strong id="confirmationPassCount">4 personas</strong></p>
+        <p>
+          Agradecemos confirmar su asistencia en el siguiente enlace:
+        </p>
+        <a class="text-link event-link" id="eventLink" href="https://tuevento.com/danielayjuanjose" target="_blank" rel="noreferrer">tuevento.com/danielayjuanjose</a>
+        <p class="deadline">Favor confirmar antes del 15 de junio.</p>
+        <a class="button" id="rsvpLink" href="#" target="_blank" rel="noreferrer">Confirmar por WhatsApp</a>
+      </section>
+
+      <section id="admin" class="admin-panel" aria-labelledby="adminTitle">
+        <div class="admin-intro">
+          <p class="section-kicker">Panel de novios</p>
+          <h2 id="adminTitle">Crear links personalizados</h2>
+          <p>
+            Puedes pegar una lista desde Excel, subir un CSV o capturar invitados uno por uno.
+            Columnas sugeridas: nombre, pases, nota.
+          </p>
+        </div>
+
+        <div class="admin-grid">
+          <form class="manual-form" id="guestForm" autocomplete="off">
+            <label>
+              Nombre del invitado
+              <input id="guestName" name="guestName" type="text" placeholder="Familia García" required />
+            </label>
+            <label>
+              Añadidos / pases
+              <input id="guestPasses" name="guestPasses" type="number" min="1" value="4" required />
+            </label>
+            <label>
+              Nota opcional
+              <input id="guestNote" name="guestNote" type="text" placeholder="Mesa 4, familia, etc." />
+            </label>
+            <button type="submit">Agregar invitado</button>
+          </form>
+
+          <div class="import-box">
+            <label>
+              Subir archivo CSV
+              <input id="csvInput" type="file" accept=".csv,text/csv" />
+            </label>
+            <label>
+              O pegar desde Excel
+              <textarea id="pasteArea" rows="6" placeholder="Nombre,pases,nota&#10;Familia Pérez,4,Mesa 2"></textarea>
+            </label>
+            <button id="importPasted" type="button">Importar lista</button>
+          </div>
+        </div>
+
+        <div class="guest-actions">
+          <button id="copyAllLinks" type="button">Copiar todos los links</button>
+          <button id="downloadCsv" type="button">Descargar CSV</button>
+          <button id="clearGuests" type="button" class="secondary">Limpiar lista</button>
+        </div>
+
+        <div class="guest-list" id="guestList" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
