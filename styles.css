@@ -392,6 +392,17 @@ a.button {
   animation: cardIn 420ms ease;
 }
 
+.reception-card .embossed-frame {
+  justify-content: center;
+  text-align: center;
+}
+
+.reception-card p,
+.reception-card h2,
+.reception-card .text-link {
+  text-align: center;
+}
+
 .embossed-frame {
   position: relative;
   display: flex;
