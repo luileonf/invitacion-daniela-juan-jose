@@ -86,11 +86,9 @@ function setupStory() {
 
   openEnvelope.addEventListener("click", () => {
     opening.classList.add("is-open");
-    window.setTimeout(() => {
-      opening.hidden = true;
-      story.classList.add("is-visible");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 880);
+    opening.hidden = true;
+    story.classList.add("is-visible");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   prevButton.addEventListener("click", () => showCard(activeIndex - 1));
