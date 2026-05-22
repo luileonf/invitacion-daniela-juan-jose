@@ -87,8 +87,9 @@ function setupStory() {
   openEnvelope.addEventListener("click", () => {
     opening.classList.add("is-open");
     window.setTimeout(() => {
+      opening.hidden = true;
       story.classList.add("is-visible");
-      story.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 880);
   });
 
