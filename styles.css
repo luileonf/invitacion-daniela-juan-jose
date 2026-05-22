@@ -454,13 +454,7 @@ a.button {
 }
 
 .card-ornament.bottom {
-  margin-top: 2px;
-  background:
-    radial-gradient(ellipse at 40% 56%, var(--green) 0 5px, transparent 6px),
-    radial-gradient(ellipse at 60% 56%, var(--green) 0 5px, transparent 6px),
-    linear-gradient(25deg, transparent 0 46%, var(--gold) 47% 50%, transparent 51% 100%),
-    linear-gradient(-25deg, transparent 0 46%, var(--gold) 47% 50%, transparent 51% 100%),
-    radial-gradient(circle at 50% 76%, var(--gold) 0 3px, transparent 4px);
+  display: none;
 }
 
 .overline,
