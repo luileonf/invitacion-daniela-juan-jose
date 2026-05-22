@@ -54,7 +54,6 @@ function saveGuests(guests) {
 }
 
 function setPersonalInvitation() {
-  document.querySelector("#coverGuestName").textContent = guestName;
   document.querySelector("#passCount").textContent = pluralizePerson(guestPasses);
   document.querySelector("#confirmationPassCount").textContent = pluralizePerson(guestPasses);
 
@@ -63,6 +62,20 @@ function setPersonalInvitation() {
 
   document.querySelector("#yesRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(yesMessage)}`;
   document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
+}
+
+async function loadSealImage() {
+  const seal = document.querySelector(".wax-seal");
+  if (!seal?.dataset.sealSrc) {
+    return;
+  }
+
+  try {
+    const encodedImage = await fetch(seal.dataset.sealSrc).then((response) => response.text());
+    seal.src = `data:image/png;base64,${encodedImage.replace(/\s/g, "")}`;
+  } catch {
+    seal.hidden = true;
+  }
 }
 
 function setupStory() {
@@ -353,5 +366,6 @@ function setupAdmin() {
 }
 
 setPersonalInvitation();
+loadSealImage();
 setupStory();
 setupAdmin();
