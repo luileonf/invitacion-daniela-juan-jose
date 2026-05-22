@@ -447,19 +447,7 @@ a.button {
 
 .embossed-frame::before,
 .embossed-frame::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: min(340px, 72%);
-  height: 22px;
-  opacity: 0.8;
-  transform: translateX(-50%);
-  background:
-    linear-gradient(90deg, transparent 0 42%, var(--gold) 42% 58%, transparent 58% 100%),
-    radial-gradient(circle at 50% 50%, var(--gold) 0 4px, transparent 5px);
-  background-size: 100% 1px, 100% 100%;
-  background-position: center, center;
-  background-repeat: no-repeat;
+  display: none;
 }
 
 .embossed-frame::before {
@@ -471,6 +459,7 @@ a.button {
 }
 
 .card-ornament {
+  display: none;
   width: min(210px, 54%);
   height: 54px;
   flex: 0 0 auto;
@@ -884,6 +873,14 @@ textarea {
     inset: 12% 0;
   }
 
+  .tap-note {
+    bottom: 18%;
+    color: var(--paper);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.46);
+  }
+
   .story-card {
     min-height: auto;
     padding: 12px;
@@ -893,14 +890,25 @@ textarea {
     min-height: 680px;
     padding: 22px 16px;
     border-width: 10px;
+    justify-content: center;
   }
 
-  .parents-grid,
   .rsvp-actions,
   .admin-grid,
   .guest-card,
   .guest-card.is-editing {
     grid-template-columns: 1fr;
+  }
+
+  .parents-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .parents-grid p,
+  .script-copy {
+    font-size: clamp(15px, 4.5vw, 18px);
+    line-height: 1.35;
   }
 
   h1 {
