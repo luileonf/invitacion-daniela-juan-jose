@@ -21,7 +21,7 @@ María López,1
 El panel genera links con el nombre del invitado y sus pases, por ejemplo:
 
 ```text
-https://tuevento.com/danielayjuanjose?invitado=Familia%20P%C3%A9rez&pases=4
+https://invitacion-daniela-juan-jose.vercel.app?invitado=Familia%20P%C3%A9rez&pases=4
 ```
 
 ## Publicar en Vercel
