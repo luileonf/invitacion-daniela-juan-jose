@@ -291,7 +291,7 @@ a.button {
 }
 
 .wax-seal::before {
-  content: "D&J";
+  content: "";
   position: absolute;
   inset: 16%;
   display: grid;
