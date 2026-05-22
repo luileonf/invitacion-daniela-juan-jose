@@ -63,20 +63,6 @@ function setPersonalInvitation() {
   document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
 }
 
-async function loadSealImage() {
-  const seal = document.querySelector(".wax-seal");
-  if (!seal?.dataset.sealSrc) {
-    return;
-  }
-
-  try {
-    const encodedImage = await fetch(seal.dataset.sealSrc).then((response) => response.text());
-    seal.src = `data:image/png;base64,${encodedImage.replace(/\s/g, "")}`;
-  } catch {
-    seal.hidden = true;
-  }
-}
-
 function setupStory() {
   const opening = document.querySelector("#opening");
   const story = document.querySelector("#story");
@@ -365,6 +351,5 @@ function setupAdmin() {
 }
 
 setPersonalInvitation();
-loadSealImage();
 setupStory();
 setupAdmin();
