@@ -184,9 +184,7 @@ a.button {
   opacity: 0;
   transform: translateY(90px) rotate(-4deg);
   background:
-    linear-gradient(rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.12)),
-    repeating-linear-gradient(90deg, transparent 0 22px, rgba(170, 141, 90, 0.08) 22px 24px),
-    repeating-linear-gradient(0deg, rgba(56, 73, 49, 0.025) 0 1px, transparent 1px 17px),
+    linear-gradient(rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.18)),
     var(--paper);
   border: 1px solid rgba(170, 141, 90, 0.32);
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
@@ -276,15 +274,35 @@ a.button {
   left: 50%;
   top: 69%;
   z-index: 8;
-  width: clamp(82px, 12vw, 128px);
-  height: auto;
+  width: clamp(76px, 10vw, 112px);
+  aspect-ratio: 1;
   display: block;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.7), transparent 24%),
+    radial-gradient(circle at 56% 58%, rgba(170, 141, 90, 0.2), transparent 36%),
+    linear-gradient(145deg, #f2eadb, #d6c5a7 54%, #bda173);
+  border: 1px solid rgba(126, 98, 55, 0.24);
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.28));
+  box-shadow:
+    inset 0 5px 8px rgba(255, 255, 255, 0.72),
+    inset 0 -10px 14px rgba(113, 88, 50, 0.18),
+    0 10px 16px rgba(0, 0, 0, 0.26);
 }
 
-.wax-seal:not([src]) {
-  opacity: 0;
+.wax-seal::before {
+  content: "D&J";
+  position: absolute;
+  inset: 16%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: rgba(56, 73, 49, 0.56);
+  font-family: var(--font-script);
+  font-size: clamp(24px, 3.4vw, 42px);
+  line-height: 1;
+  background: rgba(255, 250, 239, 0.36);
+  box-shadow: inset 0 2px 7px rgba(126, 98, 55, 0.15);
 }
 
 .cover-copy,
