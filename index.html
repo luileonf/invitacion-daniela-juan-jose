@@ -7,106 +7,108 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="#inicio" aria-label="Inicio">D&J</a>
-      <nav aria-label="Secciones de la invitación">
-        <a href="#ceremonia">Boda</a>
-        <a href="#recepcion">Recepción</a>
-        <a href="#regalos">Mesa de regalos</a>
-        <a href="#confirmar">Confirmar</a>
-      </nav>
-      <a class="admin-link" href="#admin">Novios</a>
-    </header>
-
-    <main id="inicio">
-      <section class="hero invitation-card" aria-labelledby="coupleNames">
-        <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
-
-        <div class="parents-grid" aria-label="Padres de los novios">
-          <p>Nombres de los papás de ella</p>
-          <p>Nombres de los papás de él</p>
-        </div>
-
-        <h1 id="coupleNames">Daniela <span>&</span> Juan José</h1>
-
-        <p class="guest-line" id="guestGreeting">Tenemos el honor de invitarlos a celebrar</p>
-        <p class="invitation-copy">
-          nuestro matrimonio el próximo<br />
-          <strong>Sábado 30 de agosto de 2026</strong><br />
-          hora por confirmar
-        </p>
-
-        <div class="pass-card" id="passCard">
-          <span>Invitación para</span>
-          <strong id="passCount">1 persona</strong>
-        </div>
-
-        <p class="city">Finca Shangrila · Guatemala</p>
+    <main class="experience" id="inicio">
+      <section class="opening" id="opening" aria-label="Abrir invitación">
+        <button class="envelope-button" id="openEnvelope" type="button">
+          <span class="tap-note">Toca para abrir</span>
+          <span class="envelope" aria-hidden="true">
+            <span class="envelope-card-preview"></span>
+            <span class="envelope-back"></span>
+            <span class="envelope-flap"></span>
+            <span class="envelope-left"></span>
+            <span class="envelope-right"></span>
+            <span class="envelope-pocket"></span>
+            <span class="wax-seal">D&J</span>
+          </span>
+          <span class="cover-copy">
+            <span>D&J</span>
+            <strong id="coverGuestName">Invitado especial</strong>
+          </span>
+        </button>
       </section>
 
-      <section id="ceremonia" class="detail-section">
-        <div class="section-kicker">Ceremonia</div>
-        <div>
-          <h2>Finca Shangrila</h2>
-          <p>Avenida Hincapié KM 11.5, Guatemala · Hora por confirmar</p>
-          <a class="text-link" href="https://maps.google.com/?q=Finca+Shangrila+Avenida+Hincapie+KM+11.5+Guatemala" target="_blank" rel="noreferrer">
-            Abrir ubicación en Google Maps
-          </a>
-        </div>
-      </section>
-
-      <section id="recepcion" class="detail-section reception">
-        <div class="section-kicker">Recepción</div>
-        <div>
-          <h2>Ceremonia y recepción</h2>
-          <p>En el mismo lugar</p>
-          <p class="dress-code">Esta invitación es válida para<br /><span id="receptionPassCount">(4 personas)</span></p>
-        </div>
-      </section>
-
-      <section id="regalos" class="registry-section">
-        <div class="wax-seal" aria-hidden="true"></div>
-        <div>
-          <p class="script-label">Mesa de regalos</p>
-          <h2>Su compañía es el regalo más importante para nosotros</h2>
-          <p class="registry-copy">
-            Si desean tener un detalle en esta nueva etapa, una contribución en efectivo
-            será recibida con mucho cariño.
-          </p>
-          <dl>
-            <div>
-              <dt>Transferencia</dt>
-              <dd>Banamex</dd>
+      <section class="story" id="story" aria-label="Invitación digital">
+        <div class="story-shell">
+          <article class="story-card invitation-card is-active" data-step="0">
+            <div class="embossed-frame">
+              <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
+              <div class="parents-grid">
+                <p>Nombres de los papás de ella</p>
+                <p>Nombres de los papás de él</p>
+              </div>
+              <h1>Daniela <span>&</span> Juan José</h1>
+              <p class="script-copy">Tenemos el honor de invitarlos a celebrar nuestro matrimonio</p>
+              <p class="date-line">Sábado 30 de agosto de 2026</p>
+              <p class="time-line">Hora por confirmar</p>
+              <p class="place-line">Finca Shangrila</p>
+              <p class="address">Avenida Hincapié KM 11.5, Guatemala</p>
             </div>
-            <div>
-              <dt>CLABE</dt>
-              <dd>002 320 701 120 6514 123 8</dd>
+          </article>
+
+          <article class="story-card reception-card" data-step="1">
+            <div class="embossed-frame">
+              <p class="script-label">Ceremonia y recepción</p>
+              <h2>Finca Shangrila</h2>
+              <p>Avenida Hincapié KM 11.5, Guatemala</p>
+              <p>Hora por confirmar</p>
+              <a class="text-link" href="https://maps.google.com/?q=Finca+Shangrila+Avenida+Hincapie+KM+11.5+Guatemala" target="_blank" rel="noreferrer">
+                Abrir ubicación en Google Maps
+              </a>
+              <div class="pass-card">
+                <span>Esta invitación es válida para</span>
+                <strong id="passCount">4 personas</strong>
+              </div>
             </div>
-          </dl>
+          </article>
+
+          <article class="story-card registry-card" data-step="2">
+            <div class="embossed-frame">
+              <p class="script-label">Mesa de regalos</p>
+              <h2>Su compañía es el regalo más importante para nosotros</h2>
+              <p>
+                Si desean tener un detalle en esta nueva etapa, una contribución en efectivo
+                será recibida con mucho cariño.
+              </p>
+              <dl class="bank-details">
+                <div>
+                  <dt>Transferencia</dt>
+                  <dd>Banco: Banamex</dd>
+                </div>
+                <div>
+                  <dt>CLABE</dt>
+                  <dd>002 320 701 120 6514 123 8</dd>
+                </div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="story-card rsvp-card" data-step="3">
+            <div class="embossed-frame">
+              <p class="script-label">Confirmación de asistencia</p>
+              <h2>¿Nos acompañas?</h2>
+              <p class="valid-for">Invitación para <strong id="confirmationPassCount">4 personas</strong></p>
+              <div class="rsvp-actions">
+                <a class="button" id="yesRsvpLink" href="#" target="_blank" rel="noreferrer">Sí confirmo</a>
+                <a class="button secondary" id="noRsvpLink" href="#" target="_blank" rel="noreferrer">No podré asistir</a>
+              </div>
+              <p class="deadline">Favor confirmar antes del 15 de junio.</p>
+            </div>
+          </article>
+
+          <div class="story-controls" aria-label="Controles de invitación">
+            <button class="round-button" id="prevCard" type="button" aria-label="Anterior">‹</button>
+            <span id="stepLabel">1 / 4</span>
+            <button class="next-button" id="nextCard" type="button">Siguiente</button>
+          </div>
         </div>
       </section>
 
-      <section id="confirmar" class="rsvp-section">
-        <p class="script-label">Confirmación de asistencia</p>
-        <h2>Confirmación de asistencia</h2>
-        <p class="valid-for">Esta invitación es válida para <strong id="confirmationPassCount">4 personas</strong></p>
+      <details class="admin-panel" id="admin">
+        <summary>Panel de novios: crear links personalizados</summary>
         <p>
-          Agradecemos confirmar su asistencia en el siguiente enlace:
+          Pueden pegar una lista desde Excel, subir un CSV o capturar invitados uno por uno.
+          Columnas sugeridas: nombre, pases, nota.
         </p>
-        <a class="text-link event-link" id="eventLink" href="https://tuevento.com/danielayjuanjose" target="_blank" rel="noreferrer">tuevento.com/danielayjuanjose</a>
-        <p class="deadline">Favor confirmar antes del 15 de junio.</p>
-        <a class="button" id="rsvpLink" href="#" target="_blank" rel="noreferrer">Confirmar por WhatsApp</a>
-      </section>
-
-      <section id="admin" class="admin-panel" aria-labelledby="adminTitle">
-        <div class="admin-intro">
-          <p class="section-kicker">Panel de novios</p>
-          <h2 id="adminTitle">Crear links personalizados</h2>
-          <p>
-            Puedes pegar una lista desde Excel, subir un CSV o capturar invitados uno por uno.
-            Columnas sugeridas: nombre, pases, nota.
-          </p>
-        </div>
 
         <div class="admin-grid">
           <form class="manual-form" id="guestForm" autocomplete="off">
@@ -145,7 +147,7 @@
         </div>
 
         <div class="guest-list" id="guestList" aria-live="polite"></div>
-      </section>
+      </details>
     </main>
 
     <script src="./app.js"></script>
