@@ -54,7 +54,6 @@ function saveGuests(guests) {
 }
 
 function setPersonalInvitation() {
-  document.querySelector("#passCount").textContent = pluralizePerson(guestPasses);
   document.querySelector("#confirmationPassCount").textContent = pluralizePerson(guestPasses);
 
   const yesMessage = `Hola, confirmo la asistencia de ${guestName} para la boda de Daniela y Juan José. Pases: ${pluralizePerson(guestPasses)}.`;
