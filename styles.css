@@ -1,14 +1,14 @@
 :root {
-  --navy: #111936;
-  --navy-soft: #172247;
+  --navy: #263321;
+  --navy-soft: #384931;
   --green: #384931;
   --gold: #aa8d5a;
   --cream: #ebe8e1;
-  --paper: #f8f4ea;
-  --ink: #263046;
+  --paper: #fbf6ea;
+  --ink: #223323;
   --muted: #746f67;
   --line: rgba(38, 48, 70, 0.18);
-  --shadow: 0 28px 90px rgba(15, 19, 28, 0.22);
+  --shadow: 0 28px 90px rgba(25, 35, 24, 0.24);
 }
 
 * {
@@ -27,7 +27,7 @@ body {
   background:
     radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.86), transparent 28%),
     radial-gradient(circle at 74% 18%, rgba(170, 141, 90, 0.2), transparent 24%),
-    linear-gradient(145deg, #faf8f1 0%, var(--cream) 54%, #d8d0c0 100%);
+    linear-gradient(145deg, #fffdf7 0%, var(--cream) 54%, #d8d0c0 100%);
 }
 
 body::before {
@@ -94,11 +94,12 @@ a.button {
 .envelope-right,
 .envelope-pocket {
   background:
-    radial-gradient(circle at 21% 34%, rgba(255, 255, 255, 0.11) 0 1px, transparent 2px),
-    radial-gradient(circle at 71% 22%, rgba(255, 255, 255, 0.12) 0 1px, transparent 2px),
-    radial-gradient(circle at 45% 76%, rgba(255, 255, 255, 0.13) 0 1px, transparent 2px),
+    radial-gradient(circle at 21% 34%, rgba(255, 255, 255, 0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 71% 22%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 45% 76%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
+    repeating-linear-gradient(38deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 9px),
     linear-gradient(140deg, var(--navy-soft), var(--navy) 64%);
-  background-size: 82px 82px, 110px 110px, 126px 126px, auto;
+  background-size: 82px 82px, 110px 110px, 126px 126px, auto, auto;
 }
 
 .envelope-back {
@@ -183,7 +184,7 @@ a.button {
   place-items: center;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  color: rgba(34, 34, 32, 0.68);
+  color: var(--gold);
   font-size: clamp(16px, 2vw, 24px);
   background:
     radial-gradient(circle at 28% 20%, #fff, transparent 23%),
@@ -208,11 +209,12 @@ a.button {
 
 .cover-copy span {
   font-size: clamp(34px, 5vw, 72px);
+  color: var(--gold);
 }
 
 .cover-copy strong {
   max-width: min(680px, 76vw);
-  color: var(--cream);
+  color: var(--paper);
   font-size: clamp(18px, 2.6vw, 34px);
   font-weight: 400;
   line-height: 1.25;
@@ -295,21 +297,26 @@ a.button {
   text-align: center;
   background:
     linear-gradient(var(--paper), var(--paper)) padding-box,
-    repeating-linear-gradient(90deg, rgba(170, 141, 90, 0.35) 0 2px, transparent 2px 18px) border-box;
-  border: 14px solid transparent;
-  box-shadow: inset 0 0 0 1px rgba(56, 73, 49, 0.12);
+    linear-gradient(var(--gold), var(--gold)) border-box;
+  border: 1px solid transparent;
+  outline: 10px solid rgba(235, 232, 225, 0.64);
+  box-shadow:
+    inset 0 0 0 1px rgba(170, 141, 90, 0.42),
+    inset 0 0 0 10px rgba(255, 255, 255, 0.28);
 }
 
 .embossed-frame::before,
 .embossed-frame::after {
   content: "";
-  width: min(420px, 76%);
-  height: 42px;
-  opacity: 0.34;
+  width: min(300px, 72%);
+  height: 38px;
+  opacity: 0.78;
   background:
-    radial-gradient(circle at 15px 21px, rgba(170, 141, 90, 0.38) 0 5px, transparent 6px),
-    radial-gradient(circle at 48px 21px, rgba(56, 73, 49, 0.18) 0 8px, transparent 9px);
-  background-size: 62px 42px;
+    linear-gradient(90deg, transparent 0 42%, var(--gold) 42% 58%, transparent 58% 100%),
+    radial-gradient(circle at 50% 50%, var(--gold) 0 4px, transparent 5px);
+  background-size: 100% 1px, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat;
 }
 
 .overline,
@@ -358,6 +365,7 @@ h1 span {
 }
 
 .date-line {
+  color: var(--gold);
   font-size: clamp(16px, 2.2vw, 24px);
   font-weight: 700;
 }
@@ -391,7 +399,7 @@ h2 {
   width: min(360px, 100%);
   margin-top: 18px;
   padding: 18px 24px;
-  border: 1px solid rgba(170, 141, 90, 0.48);
+  border: 1px solid rgba(170, 141, 90, 0.62);
   background: rgba(255, 255, 255, 0.42);
 }
 
