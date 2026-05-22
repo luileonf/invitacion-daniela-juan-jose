@@ -1,0 +1,556 @@
+:root {
+  --paper: #f4f1ea;
+  --paper-deep: #e8e0d1;
+  --ink: #3f3d37;
+  --muted: #756f64;
+  --olive: #6f7651;
+  --olive-dark: #4f5638;
+  --line: rgba(63, 61, 55, 0.18);
+  --white: rgba(255, 255, 255, 0.56);
+  --shadow: 0 24px 80px rgba(48, 40, 28, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.86), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(195, 181, 154, 0.28), transparent 30%),
+    linear-gradient(130deg, #f8f6f0 0%, #efe8db 48%, #d9cfbd 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.34;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 111, 92, 0.14) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mix-blend-mode: multiply;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 72px;
+  padding: 14px clamp(18px, 4vw, 56px);
+  background: rgba(246, 242, 233, 0.84);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+
+.brand,
+.admin-link,
+nav a,
+.text-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--olive-dark);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 34px);
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+nav a,
+.admin-link {
+  padding: 8px 0;
+  border-bottom: 1px solid transparent;
+}
+
+nav a:hover,
+.admin-link:hover,
+.text-link:hover {
+  border-color: currentColor;
+}
+
+.admin-link {
+  color: var(--olive-dark);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+main {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 44px 0 80px;
+}
+
+.invitation-card,
+.detail-section,
+.registry-section,
+.rsvp-section,
+.admin-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(244, 239, 228, 0.9)),
+    var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.invitation-card::after,
+.registry-section::after,
+.detail-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.6), transparent 24%),
+    repeating-linear-gradient(98deg, transparent 0 8px, rgba(85, 77, 62, 0.035) 8px 9px);
+}
+
+.hero {
+  min-height: min(760px, calc(100vh - 116px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 4vh, 38px);
+  padding: clamp(36px, 8vw, 86px) clamp(22px, 7vw, 96px);
+  text-align: center;
+}
+
+.overline,
+.section-kicker {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(14px, 1.7vw, 19px);
+  line-height: 1.7;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.parents-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px, 9vw, 100px);
+  width: min(760px, 100%);
+}
+
+.parents-grid p,
+.city,
+.script-label {
+  margin: 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: clamp(18px, 2.6vw, 25px);
+  line-height: 1.45;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  color: var(--olive);
+  font-size: clamp(66px, 9vw, 118px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.92;
+  white-space: nowrap;
+}
+
+h1 span {
+  font-size: 0.56em;
+}
+
+h2 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.guest-line {
+  margin-bottom: -24px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: clamp(17px, 2vw, 24px);
+}
+
+.invitation-copy {
+  margin-bottom: 0;
+  color: var(--ink);
+  font-size: clamp(16px, 2vw, 21px);
+  line-height: 1.72;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.invitation-copy strong {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.pass-card {
+  display: grid;
+  gap: 4px;
+  min-width: min(320px, 100%);
+  padding: 16px 28px;
+  border: 1px solid rgba(111, 118, 81, 0.36);
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.pass-card span {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.pass-card strong {
+  color: var(--olive-dark);
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.detail-section,
+.registry-section,
+.rsvp-section,
+.admin-panel {
+  margin-top: 22px;
+  padding: clamp(32px, 6vw, 76px);
+}
+
+.detail-section {
+  display: grid;
+  grid-template-columns: 0.85fr 1.4fr;
+  gap: clamp(28px, 7vw, 92px);
+  align-items: center;
+  min-height: 330px;
+}
+
+.detail-section p,
+.rsvp-section p,
+.admin-intro p,
+.registry-copy {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.text-link {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 22px;
+  font-style: italic;
+  border-bottom: 1px solid currentColor;
+}
+
+.reception {
+  background:
+    linear-gradient(135deg, rgba(231, 225, 211, 0.84), rgba(212, 204, 185, 0.72)),
+    var(--paper-deep);
+}
+
+.dress-code {
+  margin-top: 54px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.dress-code span {
+  display: inline-block;
+  margin-top: 12px;
+}
+
+.registry-section {
+  display: grid;
+  place-items: center;
+  min-height: 430px;
+  text-align: center;
+}
+
+.wax-seal {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  width: 122px;
+  height: 122px;
+  transform: translateX(-50%);
+  border: 12px solid rgba(107, 75, 42, 0.62);
+  border-radius: 50%;
+  background: radial-gradient(circle, #c0a16f 0 34%, #8a6237 36% 58%, #5e4126 60% 100%);
+  opacity: 0.65;
+}
+
+.script-label {
+  margin-bottom: 34px;
+  text-align: left;
+}
+
+.registry-section .script-label {
+  text-align: center;
+}
+
+.registry-copy {
+  max-width: 660px;
+  margin: 0 auto 28px;
+}
+
+dl {
+  margin: 22px 0 0;
+}
+
+dl div {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: clamp(18px, 3vw, 27px);
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+}
+
+dt {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 0;
+  font-style: italic;
+}
+
+.rsvp-section {
+  text-align: center;
+}
+
+.valid-for {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.valid-for strong {
+  display: block;
+  margin-top: 10px;
+  color: var(--olive-dark);
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.event-link {
+  margin: 4px 0 20px;
+}
+
+.deadline {
+  margin-top: 16px;
+  font-style: italic;
+}
+
+.button,
+button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 13px 20px;
+  border: 1px solid var(--olive-dark);
+  border-radius: 0;
+  background: var(--olive-dark);
+  color: #fffaf0;
+  font: 700 13px Arial, Helvetica, sans-serif;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--olive-dark);
+}
+
+.admin-panel {
+  background: rgba(255, 255, 255, 0.64);
+}
+
+.admin-intro {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 18px;
+}
+
+.manual-form,
+.import-box,
+.guest-card {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font: 700 12px Arial, Helvetica, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--ink);
+  font: 16px Georgia, "Times New Roman", serif;
+  padding: 13px 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.guest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 16px;
+}
+
+.guest-list {
+  display: grid;
+  gap: 12px;
+}
+
+.guest-card {
+  grid-template-columns: minmax(180px, 1fr) minmax(190px, 2fr) auto;
+  align-items: center;
+}
+
+.guest-card h3 {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.guest-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.guest-url {
+  overflow: hidden;
+  color: var(--olive-dark);
+  font: 13px Arial, Helvetica, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 22px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 820px) {
+  .site-header {
+    align-items: flex-start;
+  }
+
+  nav {
+    display: none;
+  }
+
+  main {
+    width: min(100% - 22px, 1120px);
+    padding-top: 18px;
+  }
+
+  .hero {
+    min-height: calc(100vh - 92px);
+  }
+
+  .parents-grid,
+  .detail-section,
+  .admin-grid,
+  .guest-card {
+    grid-template-columns: 1fr;
+  }
+
+  .guest-line {
+    margin-bottom: -10px;
+  }
+
+  h1 {
+    font-size: clamp(58px, 19vw, 104px);
+    white-space: normal;
+  }
+
+  .invitation-copy {
+    letter-spacing: 0.05em;
+  }
+
+  dl div {
+    display: grid;
+    gap: 0;
+  }
+
+  .guest-card {
+    gap: 16px;
+  }
+
+  .guest-card .button {
+    width: 100%;
+  }
+}
