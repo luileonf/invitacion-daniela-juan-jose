@@ -3,21 +3,13 @@ const DEFAULT_INVITATION_PASSES = 4;
 const whatsappNumber = "5218710000000";
 
 const defaultGuests = [
-  {
-    name: "Familia Garcia",
-    passes: 4,
-    note: "Ejemplo de invitacion familiar",
-  },
-  {
-    name: "Ana Lopez",
-    passes: 1,
-    note: "Ejemplo individual",
-  },
+  { name: "Familia Garcia", passes: 4, note: "Ejemplo familiar" },
+  { name: "Ana Lopez", passes: 1, note: "Ejemplo individual" },
 ];
 
-function getParams() {
-  return new URLSearchParams(window.location.search);
-}
+const params = new URLSearchParams(window.location.search);
+const guestName = params.get("invitado") || "Invitado especial";
+const guestPasses = normalizePasses(params.get("pases"), DEFAULT_INVITATION_PASSES);
 
 function getBaseUrl() {
   return `${window.location.origin}${window.location.pathname}`;
@@ -61,32 +53,55 @@ function saveGuests(guests) {
 }
 
 function setPersonalInvitation() {
-  const params = getParams();
-  const guestName = params.get("invitado");
-  const passes = normalizePasses(params.get("pases"), DEFAULT_INVITATION_PASSES);
-  const greeting = document.querySelector("#guestGreeting");
-  const passCount = document.querySelector("#passCount");
-  const receptionPassCount = document.querySelector("#receptionPassCount");
-  const confirmationPassCount = document.querySelector("#confirmationPassCount");
-  const passCard = document.querySelector("#passCard");
-  const rsvpLink = document.querySelector("#rsvpLink");
+  document.querySelector("#coverGuestName").textContent = guestName;
+  document.querySelector("#passCount").textContent = pluralizePerson(guestPasses);
+  document.querySelector("#confirmationPassCount").textContent = pluralizePerson(guestPasses);
 
-  if (guestName) {
-    greeting.textContent = `${guestName}, tenemos el honor de invitarlos a celebrar`;
-    passCard.hidden = false;
-  } else {
-    greeting.textContent = "Tenemos el honor de invitarlos a celebrar";
+  const yesMessage = `Hola, confirmo la asistencia de ${guestName} para la boda de Daniela y Juan José. Pases: ${pluralizePerson(guestPasses)}.`;
+  const noMessage = `Hola, muchas gracias por la invitación a la boda de Daniela y Juan José. ${guestName} no podrá asistir.`;
+
+  document.querySelector("#yesRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(yesMessage)}`;
+  document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
+}
+
+function setupStory() {
+  const opening = document.querySelector("#opening");
+  const story = document.querySelector("#story");
+  const openEnvelope = document.querySelector("#openEnvelope");
+  const cards = [...document.querySelectorAll(".story-card")];
+  const prevButton = document.querySelector("#prevCard");
+  const nextButton = document.querySelector("#nextCard");
+  const stepLabel = document.querySelector("#stepLabel");
+  let activeIndex = 0;
+
+  function showCard(index) {
+    activeIndex = Math.max(0, Math.min(index, cards.length - 1));
+    cards.forEach((card, cardIndex) => {
+      card.classList.toggle("is-active", cardIndex === activeIndex);
+    });
+    prevButton.disabled = activeIndex === 0;
+    nextButton.textContent = activeIndex === cards.length - 1 ? "Confirmar" : "Siguiente";
+    stepLabel.textContent = `${activeIndex + 1} / ${cards.length}`;
   }
 
-  passCount.textContent = pluralizePerson(passes);
-  receptionPassCount.textContent = `(${pluralizePerson(passes)})`;
-  confirmationPassCount.textContent = pluralizePerson(passes);
+  openEnvelope.addEventListener("click", () => {
+    opening.classList.add("is-open");
+    window.setTimeout(() => {
+      story.classList.add("is-visible");
+      story.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 880);
+  });
 
-  const message = guestName
-    ? `Hola, confirmo la asistencia de ${guestName} para la boda de Daniela y Juan José. Pases: ${pluralizePerson(passes)}.`
-    : "Hola, quiero confirmar asistencia para la boda de Daniela y Juan José.";
+  prevButton.addEventListener("click", () => showCard(activeIndex - 1));
+  nextButton.addEventListener("click", () => {
+    if (activeIndex === cards.length - 1) {
+      document.querySelector("#yesRsvpLink").focus();
+      return;
+    }
+    showCard(activeIndex + 1);
+  });
 
-  rsvpLink.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  showCard(0);
 }
 
 function parseRows(text) {
@@ -193,9 +208,7 @@ function setupAdmin() {
     });
     saveGuests(guests.filter((guest) => guest.name));
     form.reset();
-    document.querySelector("#guestName").value = "";
     document.querySelector("#guestPasses").value = DEFAULT_INVITATION_PASSES;
-    document.querySelector("#guestNote").value = "";
     renderGuests();
   });
 
@@ -204,15 +217,13 @@ function setupAdmin() {
     if (!file) {
       return;
     }
-    const importedGuests = parseGuestList(await file.text());
-    saveGuests([...readGuests(), ...importedGuests]);
+    saveGuests([...readGuests(), ...parseGuestList(await file.text())]);
     csvInput.value = "";
     renderGuests();
   });
 
   importPasted.addEventListener("click", () => {
-    const importedGuests = parseGuestList(pasteArea.value);
-    saveGuests([...readGuests(), ...importedGuests]);
+    saveGuests([...readGuests(), ...parseGuestList(pasteArea.value)]);
     pasteArea.value = "";
     renderGuests();
   });
@@ -249,9 +260,7 @@ function setupAdmin() {
       guest.note || "",
       createGuestUrl(guest),
     ]);
-    const csv = [header, ...rows]
-      .map((row) => row.map(escapeCsv).join(","))
-      .join("\n");
+    const csv = [header, ...rows].map((row) => row.map(escapeCsv).join(",")).join("\n");
     downloadFile("links-invitados-daniela-juan-jose.csv", csv, "text/csv;charset=utf-8");
   });
 
@@ -266,4 +275,5 @@ function setupAdmin() {
 }
 
 setPersonalInvitation();
+setupStory();
 setupAdmin();
