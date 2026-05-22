@@ -236,6 +236,10 @@ a.button {
   transition: transform 900ms ease;
 }
 
+.opening.is-open {
+  display: none;
+}
+
 .opening.is-open .envelope-card-preview {
   opacity: 1;
   transform: translateY(-150px) rotate(-3deg);
