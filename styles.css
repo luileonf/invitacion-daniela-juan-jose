@@ -1,14 +1,22 @@
 :root {
-  --navy: #263321;
-  --navy-soft: #384931;
+  --font-smallcaps: "Cinzel", Georgia, serif;
+  --font-body: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", "Playfair Display", cursive;
+  --font-display: "Playfair Display", "Cormorant Garamond", serif;
+  --green-deep: #263321;
+  --green-shadow: #1d281a;
   --green: #384931;
   --gold: #aa8d5a;
+  --gold-soft: rgba(170, 141, 90, 0.46);
   --cream: #ebe8e1;
   --paper: #fbf6ea;
+  --paper-warm: #f3eadb;
+  --paper-deep: #ded4c3;
   --ink: #223323;
   --muted: #746f67;
-  --line: rgba(38, 48, 70, 0.18);
+  --line: rgba(56, 73, 49, 0.18);
   --shadow: 0 28px 90px rgba(25, 35, 24, 0.24);
+  --paper-shadow: 0 24px 70px rgba(55, 42, 26, 0.2);
 }
 
 * {
@@ -23,7 +31,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   background:
     radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.86), transparent 28%),
     radial-gradient(circle at 74% 18%, rgba(170, 141, 90, 0.2), transparent 24%),
@@ -94,12 +102,70 @@ a.button {
 .envelope-right,
 .envelope-pocket {
   background:
-    radial-gradient(circle at 21% 34%, rgba(255, 255, 255, 0.07) 0 1px, transparent 2px),
-    radial-gradient(circle at 71% 22%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
-    radial-gradient(circle at 45% 76%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 24% 30%, rgba(255, 255, 255, 0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 42% 74%, rgba(255, 255, 255, 0.08) 0 1px, transparent 2px),
+    repeating-radial-gradient(circle at 32% 48%, transparent 0 8px, rgba(255, 255, 255, 0.018) 9px 10px),
     repeating-linear-gradient(38deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 9px),
-    linear-gradient(140deg, var(--navy-soft), var(--navy) 64%);
-  background-size: 82px 82px, 110px 110px, 126px 126px, auto, auto;
+    linear-gradient(140deg, var(--green), var(--green-deep) 64%);
+  background-size: 82px 82px, 110px 110px, 126px 126px, 46px 46px, auto, auto;
+}
+
+.envelope-liner {
+  left: 7%;
+  right: 7%;
+  top: 2%;
+  height: 47%;
+  z-index: 1;
+  border-radius: 48% 48% 0 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18)),
+    repeating-linear-gradient(90deg, rgba(56, 73, 49, 0.035) 0 1px, transparent 1px 13px),
+    radial-gradient(circle at 50% 62%, rgba(170, 141, 90, 0.16), transparent 34%),
+    var(--paper);
+  border: 10px solid var(--green);
+  border-bottom: 0;
+  box-shadow: inset 0 -8px 20px rgba(170, 141, 90, 0.1);
+}
+
+.botanical-mark {
+  position: absolute;
+  display: block;
+  left: 50%;
+  top: 50%;
+  width: min(220px, 48%);
+  height: 104px;
+  transform: translate(-50%, -28%);
+  opacity: 0.78;
+}
+
+.botanical-mark::before,
+.botanical-mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  width: 2px;
+  height: 86px;
+  transform-origin: bottom center;
+  background: linear-gradient(var(--gold), var(--gold));
+  border-radius: 20px;
+}
+
+.botanical-mark::before {
+  transform: rotate(-50deg);
+  box-shadow:
+    -24px 24px 0 -1px var(--green),
+    -42px 45px 0 -1px var(--gold),
+    -58px 60px 0 -1px var(--green);
+}
+
+.botanical-mark::after {
+  transform: rotate(50deg);
+  box-shadow:
+    24px 24px 0 -1px var(--green),
+    42px 45px 0 -1px var(--gold),
+    58px 60px 0 -1px var(--green);
 }
 
 .envelope-back {
@@ -117,6 +183,7 @@ a.button {
   background:
     linear-gradient(rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.12)),
     repeating-linear-gradient(90deg, transparent 0 22px, rgba(170, 141, 90, 0.08) 22px 24px),
+    repeating-linear-gradient(0deg, rgba(56, 73, 49, 0.025) 0 1px, transparent 1px 17px),
     var(--paper);
   border: 1px solid rgba(170, 141, 90, 0.32);
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
@@ -129,8 +196,8 @@ a.button {
   left: 0;
   right: 0;
   color: var(--ink);
+  font-family: var(--font-script);
   font-size: clamp(28px, 5vw, 64px);
-  font-style: italic;
   text-align: center;
 }
 
@@ -185,6 +252,7 @@ a.button {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   color: var(--gold);
+  font-family: var(--font-display);
   font-size: clamp(16px, 2vw, 24px);
   background:
     radial-gradient(circle at 28% 20%, #fff, transparent 23%),
@@ -208,13 +276,26 @@ a.button {
 }
 
 .cover-copy span {
+  font-family: var(--font-display);
   font-size: clamp(34px, 5vw, 72px);
   color: var(--gold);
+}
+
+.cover-copy i {
+  width: min(178px, 42vw);
+  height: 16px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--gold) 0 3px, transparent 4px),
+    linear-gradient(90deg, transparent 0 10%, var(--gold) 10% 43%, transparent 43% 57%, var(--gold) 57% 90%, transparent 90% 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 1px;
+  background-position: center, center;
 }
 
 .cover-copy strong {
   max-width: min(680px, 76vw);
   color: var(--paper);
+  font-family: var(--font-body);
   font-size: clamp(18px, 2.6vw, 34px);
   font-weight: 400;
   line-height: 1.25;
@@ -226,6 +307,7 @@ a.button {
   right: 0;
   bottom: 9%;
   color: rgba(235, 232, 225, 0.78);
+  font-family: var(--font-smallcaps);
   font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -244,6 +326,7 @@ a.button {
 }
 
 .opening.is-opening .envelope-back,
+.opening.is-opening .envelope-liner,
 .opening.is-opening .envelope-left,
 .opening.is-opening .envelope-right,
 .opening.is-opening .envelope-pocket {
@@ -284,9 +367,11 @@ a.button {
   padding: clamp(20px, 4vw, 44px);
   background:
     linear-gradient(rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.12)),
+    repeating-linear-gradient(90deg, rgba(56, 73, 49, 0.022) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(0deg, rgba(170, 141, 90, 0.026) 0 1px, transparent 1px 21px),
     var(--paper);
-  border: 1px solid rgba(170, 141, 90, 0.35);
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(170, 141, 90, 0.38);
+  box-shadow: var(--paper-shadow);
 }
 
 .story-card.is-active {
@@ -295,6 +380,7 @@ a.button {
 }
 
 .embossed-frame {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -304,6 +390,10 @@ a.button {
   padding: clamp(28px, 6vw, 58px);
   text-align: center;
   background:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.55), transparent 32%),
+    radial-gradient(circle at 82% 84%, rgba(170, 141, 90, 0.1), transparent 28%),
+    repeating-linear-gradient(90deg, rgba(56, 73, 49, 0.018) 0 1px, transparent 1px 15px),
+    repeating-linear-gradient(0deg, rgba(170, 141, 90, 0.02) 0 1px, transparent 1px 17px),
     linear-gradient(var(--paper), var(--paper)) padding-box,
     linear-gradient(var(--gold), var(--gold)) border-box;
   border: 1px solid transparent;
@@ -316,9 +406,12 @@ a.button {
 .embossed-frame::before,
 .embossed-frame::after {
   content: "";
-  width: min(300px, 72%);
-  height: 38px;
-  opacity: 0.78;
+  position: absolute;
+  left: 50%;
+  width: min(340px, 72%);
+  height: 22px;
+  opacity: 0.8;
+  transform: translateX(-50%);
   background:
     linear-gradient(90deg, transparent 0 42%, var(--gold) 42% 58%, transparent 58% 100%),
     radial-gradient(circle at 50% 50%, var(--gold) 0 4px, transparent 5px);
@@ -327,12 +420,43 @@ a.button {
   background-repeat: no-repeat;
 }
 
+.embossed-frame::before {
+  top: clamp(14px, 3vw, 26px);
+}
+
+.embossed-frame::after {
+  bottom: clamp(14px, 3vw, 26px);
+}
+
+.card-ornament {
+  width: min(210px, 54%);
+  height: 54px;
+  flex: 0 0 auto;
+  background:
+    radial-gradient(circle at 50% 46%, var(--gold) 0 3px, transparent 4px),
+    linear-gradient(90deg, transparent 0 8%, var(--gold) 8% 43%, transparent 43% 57%, var(--gold) 57% 92%, transparent 92% 100%);
+  background-size: 100% 100%, 100% 1px;
+  background-position: center, center 17px;
+  background-repeat: no-repeat;
+}
+
+.card-ornament.bottom {
+  margin-top: 2px;
+  background:
+    radial-gradient(ellipse at 40% 56%, var(--green) 0 5px, transparent 6px),
+    radial-gradient(ellipse at 60% 56%, var(--green) 0 5px, transparent 6px),
+    linear-gradient(25deg, transparent 0 46%, var(--gold) 47% 50%, transparent 51% 100%),
+    linear-gradient(-25deg, transparent 0 46%, var(--gold) 47% 50%, transparent 51% 100%),
+    radial-gradient(circle at 50% 76%, var(--gold) 0 3px, transparent 4px);
+}
+
 .overline,
 .date-line,
 .place-line,
 h2 {
   margin: 0;
   color: var(--ink);
+  font-family: var(--font-smallcaps);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -350,32 +474,46 @@ h2 {
 }
 
 .parents-grid p,
-.script-copy,
-.script-label {
+.script-copy {
   margin: 0;
   color: var(--muted);
+  font-family: var(--font-body);
   font-size: clamp(17px, 2.2vw, 24px);
   font-style: italic;
   line-height: 1.45;
 }
 
+.script-label {
+  margin: 0;
+  color: var(--green);
+  font-family: var(--font-smallcaps);
+  font-size: clamp(14px, 1.8vw, 19px);
+  font-style: normal;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
 h1 {
   margin: 0;
   color: var(--green);
+  font-family: var(--font-script);
   font-size: clamp(48px, 9vw, 96px);
-  font-style: italic;
   font-weight: 400;
   line-height: 0.95;
 }
 
 h1 span {
   font-size: 0.58em;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-style: italic;
 }
 
 .date-line {
   color: var(--gold);
   font-size: clamp(16px, 2.2vw, 24px);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .time-line,
@@ -395,6 +533,7 @@ h2 {
 
 .text-link {
   color: var(--green);
+  font-family: var(--font-body);
   font-size: clamp(18px, 2.2vw, 24px);
   font-style: italic;
   text-decoration: none;
@@ -414,6 +553,7 @@ h2 {
 .pass-card span,
 .bank-details dt {
   color: var(--muted);
+  font-family: var(--font-smallcaps);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -422,6 +562,7 @@ h2 {
 .pass-card strong,
 .valid-for strong {
   color: var(--green);
+  font-family: var(--font-display);
   font-size: 26px;
   font-weight: 500;
 }
@@ -456,13 +597,20 @@ h2 {
 .manual-form button,
 .import-box button,
 .guest-actions button,
-.copy-link {
+.copy-link,
+.edit-guest,
+.save-guest,
+.cancel-edit,
+.admin-open {
   min-height: 46px;
   display: inline-grid;
   place-items: center;
   padding: 12px 18px;
   border: 1px solid var(--green);
   color: var(--paper);
+  font-family: var(--font-smallcaps);
+  font-size: 12px;
+  font-weight: 500;
   background: var(--green);
   text-decoration: none;
   letter-spacing: 0.08em;
@@ -470,7 +618,8 @@ h2 {
 }
 
 .button.secondary,
-.guest-actions .secondary {
+.guest-actions .secondary,
+.cancel-edit {
   color: var(--green);
   background: transparent;
 }
@@ -489,6 +638,7 @@ h2 {
 
 .story-controls span {
   color: var(--muted);
+  font-family: var(--font-smallcaps);
   font-size: 14px;
 }
 
@@ -553,6 +703,10 @@ label {
   display: grid;
   gap: 8px;
   color: var(--ink);
+  font-family: var(--font-smallcaps);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 input,
@@ -561,6 +715,8 @@ textarea {
   padding: 12px 14px;
   border: 1px solid var(--line);
   color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
   background: rgba(255, 255, 255, 0.72);
 }
 
@@ -594,6 +750,12 @@ textarea {
 .guest-card h3,
 .guest-card p {
   margin: 0;
+}
+
+.guest-card h3 {
+  color: var(--green);
+  font-family: var(--font-display);
+  font-weight: 500;
 }
 
 .guest-url {
