@@ -735,6 +735,7 @@ label {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   padding: 12px 14px;
@@ -743,6 +744,51 @@ textarea {
   font-family: var(--font-body);
   font-size: 18px;
   background: rgba(255, 255, 255, 0.72);
+}
+
+.attendance-field {
+  width: min(320px, 100%);
+  text-align: center;
+}
+
+.attendance-field select {
+  text-align: center;
+}
+
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.admin-summary div {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid rgba(170, 141, 90, 0.34);
+  background: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.admin-summary span,
+.rsvp-status {
+  color: var(--muted);
+  font-family: var(--font-smallcaps);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-summary strong {
+  color: var(--green);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.whatsapp-config {
+  margin-bottom: 18px;
 }
 
 .guest-actions {
@@ -894,6 +940,7 @@ textarea {
   }
 
   .rsvp-actions,
+  .admin-summary,
   .admin-grid,
   .guest-card,
   .guest-card.is-editing {
