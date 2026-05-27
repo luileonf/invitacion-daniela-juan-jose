@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=14" />
+    <link rel="stylesheet" href="./styles.css?v=15" />
   </head>
   <body>
     <main class="experience" id="inicio">
@@ -42,15 +42,13 @@
               <div class="card-ornament top" aria-hidden="true"></div>
               <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
               <div class="parents-grid">
-                <p>Juan José Solórzano<br />Karla Monroy</p>
-                <p>Alejandro Rabanales<br />Ingrid de Rabanales</p>
+                <p>Ingrid y Alejandro</p>
+                <p>Juan José y Karla</p>
               </div>
               <h1>Daniela <span>&</span> Juan José</h1>
               <p class="script-copy">Tenemos el honor de invitarlos a celebrar nuestro matrimonio</p>
-              <p class="date-line">Sábado 30 de agosto de 2026</p>
-              <p class="time-line">Hora por confirmar</p>
-              <p class="place-line">Finca Shangrila</p>
-              <p class="address">Avenida Hincapié KM 11.5, Guatemala</p>
+              <p class="date-line">Sábado 15 de agosto de 2026</p>
+              <p class="time-line">17:00 hrs</p>
               <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
@@ -58,11 +56,10 @@
           <article class="story-card reception-card" data-step="1">
             <div class="embossed-frame">
               <div class="card-ornament top" aria-hidden="true"></div>
-              <p class="script-label">Recepción</p>
-              <h2>Finca Shangrila</h2>
+              <p class="script-label">Ceremonia & recepción</p>
+              <h2>Finca Shangri-la</h2>
               <p>Avenida Hincapié KM 11.5, Guatemala</p>
-              <p>Hora por confirmar</p>
-              <a class="text-link" href="https://maps.google.com/?q=Finca+Shangrila+Avenida+Hincapie+KM+11.5+Guatemala" target="_blank" rel="noreferrer">
+              <a class="text-link" href="https://maps.google.com/?q=Finca+Shangri-la+Avenida+Hincapie+KM+11.5+Guatemala" target="_blank" rel="noreferrer">
                 Abrir ubicación en Google Maps
               </a>
               <div class="card-ornament bottom" aria-hidden="true"></div>
@@ -72,7 +69,6 @@
           <article class="story-card registry-card" data-step="2">
             <div class="embossed-frame">
               <div class="card-ornament top" aria-hidden="true"></div>
-              <p class="script-label">Lluvia de sobres</p>
               <h2>Su presencia en este día tan especial es nuestro mayor regalo</h2>
               <p>
                 Si desean tener un detalle con nosotros, agradeceremos que sea en efectivo
@@ -88,11 +84,15 @@
               <p class="script-label">Confirmación de asistencia</p>
               <h2>¿Nos acompañas?</h2>
               <p class="valid-for">Invitación para <strong id="confirmationPassCount">4 personas</strong></p>
+              <label class="attendance-field">
+                Personas que asistirán
+                <select id="attendingCount"></select>
+              </label>
               <div class="rsvp-actions">
                 <a class="button" id="yesRsvpLink" href="#" target="_blank" rel="noreferrer">Sí confirmo</a>
                 <a class="button secondary" id="noRsvpLink" href="#" target="_blank" rel="noreferrer">No podré asistir</a>
               </div>
-              <p class="deadline">Favor confirmar antes del 15 de junio.</p>
+              <p class="deadline">Favor confirmar antes del 30 de julio.</p>
               <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
@@ -117,6 +117,13 @@
             Columnas sugeridas: nombre, pases, nota.
           </p>
         </div>
+
+        <div class="admin-summary" id="adminSummary"></div>
+
+        <label class="whatsapp-config">
+          WhatsApp para recibir confirmaciones
+          <input id="whatsappNumberInput" type="tel" placeholder="50212345678" />
+        </label>
 
         <div class="admin-grid">
           <form class="manual-form" id="guestForm" autocomplete="off">
@@ -158,6 +165,6 @@
       </section>
     </main>
 
-    <script src="./app.js?v=12"></script>
+    <script src="./app.js?v=13"></script>
   </body>
 </html>
