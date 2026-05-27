@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=15" />
+    <link rel="stylesheet" href="./styles.css?v=16" />
   </head>
   <body>
     <main class="experience" id="inicio">
@@ -89,9 +89,10 @@
                 <select id="attendingCount"></select>
               </label>
               <div class="rsvp-actions">
-                <a class="button" id="yesRsvpLink" href="#" target="_blank" rel="noreferrer">Sí confirmo</a>
-                <a class="button secondary" id="noRsvpLink" href="#" target="_blank" rel="noreferrer">No podré asistir</a>
+                <button class="button" id="yesRsvpLink" type="button">Asistiré</button>
+                <button class="button secondary" id="noRsvpLink" type="button">No podré asistir</button>
               </div>
+              <p class="rsvp-feedback" id="rsvpFeedback" aria-live="polite"></p>
               <p class="deadline">Favor confirmar antes del 30 de julio.</p>
               <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
@@ -119,11 +120,6 @@
         </div>
 
         <div class="admin-summary" id="adminSummary"></div>
-
-        <label class="whatsapp-config">
-          WhatsApp para recibir confirmaciones
-          <input id="whatsappNumberInput" type="tel" placeholder="50212345678" />
-        </label>
 
         <div class="admin-grid">
           <form class="manual-form" id="guestForm" autocomplete="off">
@@ -165,6 +161,6 @@
       </section>
     </main>
 
-    <script src="./app.js?v=13"></script>
+    <script src="./app.js?v=14"></script>
   </body>
 </html>
