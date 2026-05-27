@@ -1,7 +1,9 @@
 const STORAGE_KEY = "danielaJuanJoseWeddingGuests";
+const RSVP_STORAGE_KEY = "danielaJuanJoseWeddingRsvps";
+const WHATSAPP_STORAGE_KEY = "danielaJuanJoseWeddingWhatsapp";
 const DEFAULT_INVITATION_PASSES = 4;
 const ADMIN_PASSWORD = "Dani&JuanJoPorSiempre";
-const whatsappNumber = "5218710000000";
+const DEFAULT_WHATSAPP_NUMBER = "50212345678";
 
 const defaultGuests = [
   { name: "Familia Garcia", passes: 4, note: "Ejemplo familiar" },
@@ -11,6 +13,7 @@ const defaultGuests = [
 const params = new URLSearchParams(window.location.search);
 const guestName = params.get("invitado") || "Invitado especial";
 const guestPasses = normalizePasses(params.get("pases"), DEFAULT_INVITATION_PASSES);
+const guestWhatsappNumber = params.get("whatsapp")?.replace(/[^\d]/g, "") || "";
 
 function getBaseUrl() {
   return `${window.location.origin}${window.location.pathname}`;
@@ -25,10 +28,40 @@ function pluralizePerson(count) {
   return count === 1 ? "1 persona" : `${count} personas`;
 }
 
+function getWhatsappNumber() {
+  return guestWhatsappNumber || window.localStorage.getItem(WHATSAPP_STORAGE_KEY) || DEFAULT_WHATSAPP_NUMBER;
+}
+
+function readRsvps() {
+  const saved = window.localStorage.getItem(RSVP_STORAGE_KEY);
+  if (!saved) {
+    return {};
+  }
+
+  try {
+    const parsed = JSON.parse(saved);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveRsvp(status, attending = 0) {
+  const rsvps = readRsvps();
+  rsvps[guestName] = {
+    status,
+    attending: status === "yes" ? attending : 0,
+    allowed: guestPasses,
+    updatedAt: new Date().toISOString(),
+  };
+  window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(rsvps));
+}
+
 function createGuestUrl(guest) {
   const url = new URL(getBaseUrl());
   url.searchParams.set("invitado", guest.name);
   url.searchParams.set("pases", String(normalizePasses(guest.passes)));
+  url.searchParams.set("whatsapp", getWhatsappNumber());
   if (guest.note) {
     url.searchParams.set("nota", guest.note);
   }
@@ -55,12 +88,33 @@ function saveGuests(guests) {
 
 function setPersonalInvitation() {
   document.querySelector("#confirmationPassCount").textContent = pluralizePerson(guestPasses);
+  const attendingCount = document.querySelector("#attendingCount");
 
-  const yesMessage = `Hola, confirmo la asistencia de ${guestName} para la boda de Daniela y Juan José. Pases: ${pluralizePerson(guestPasses)}.`;
-  const noMessage = `Hola, muchas gracias por la invitación a la boda de Daniela y Juan José. ${guestName} no podrá asistir.`;
+  attendingCount.innerHTML = Array.from({ length: guestPasses }, (_, index) => {
+    const count = index + 1;
+    return `<option value="${count}">${pluralizePerson(count)}</option>`;
+  }).join("");
+  attendingCount.value = String(guestPasses);
 
-  document.querySelector("#yesRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(yesMessage)}`;
-  document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
+  function updateWhatsappLinks() {
+    const selectedCount = normalizePasses(attendingCount.value, guestPasses);
+    const whatsappNumber = getWhatsappNumber();
+    const yesMessage = `Hola, confirmo mi asistencia a la boda de Daniela y Juan José. Invitado: ${guestName}. Asistiremos ${pluralizePerson(selectedCount)} de ${pluralizePerson(guestPasses)} disponibles.`;
+    const noMessage = `Hola, muchas gracias por la invitación a la boda de Daniela y Juan José. Invitado: ${guestName}. No podremos asistir.`;
+
+    document.querySelector("#yesRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(yesMessage)}`;
+    document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
+  }
+
+  attendingCount.addEventListener("change", updateWhatsappLinks);
+  document.querySelector("#yesRsvpLink").addEventListener("click", () => {
+    saveRsvp("yes", normalizePasses(attendingCount.value, guestPasses));
+  });
+  document.querySelector("#noRsvpLink").addEventListener("click", () => {
+    saveRsvp("no", 0);
+  });
+
+  updateWhatsappLinks();
 }
 
 function setupStory() {
@@ -164,6 +218,8 @@ function escapeHtml(value) {
 function renderGuests() {
   const list = document.querySelector("#guestList");
   const guests = readGuests();
+  const rsvps = readRsvps();
+  renderAdminSummary();
 
   if (!guests.length) {
     list.innerHTML = `<div class="empty-state">Aún no hay invitados. Agrega uno manualmente o importa tu lista.</div>`;
@@ -176,11 +232,18 @@ function renderGuests() {
       const safeName = escapeHtml(guest.name);
       const safeNote = escapeHtml(guest.note || "");
       const safeUrl = escapeHtml(url);
+      const rsvp = rsvps[guest.name];
+      const rsvpText = rsvp
+        ? rsvp.status === "yes"
+          ? `Confirmó ${pluralizePerson(normalizePasses(rsvp.attending, 0))}`
+          : "No asistirá"
+        : "Sin confirmar";
       return `
         <article class="guest-card" data-index="${index}">
           <div>
             <h3>${safeName}</h3>
             <p>${pluralizePerson(normalizePasses(guest.passes))}${safeNote ? ` · ${safeNote}` : ""}</p>
+            <p class="rsvp-status">${escapeHtml(rsvpText)}</p>
           </div>
           <div class="guest-url" title="${safeUrl}">${safeUrl}</div>
           <div class="guest-card-actions">
@@ -191,6 +254,34 @@ function renderGuests() {
       `;
     })
     .join("");
+}
+
+function renderAdminSummary() {
+  const summary = document.querySelector("#adminSummary");
+  if (!summary) {
+    return;
+  }
+  const guests = readGuests();
+  const rsvps = readRsvps();
+  const totalAllowed = guests.reduce((sum, guest) => sum + normalizePasses(guest.passes), 0);
+  const confirmedGuests = Object.values(rsvps).filter((rsvp) => rsvp.status === "yes");
+  const declinedGuests = Object.values(rsvps).filter((rsvp) => rsvp.status === "no");
+  const totalConfirmed = confirmedGuests.reduce((sum, rsvp) => sum + normalizePasses(rsvp.attending, 0), 0);
+
+  summary.innerHTML = `
+    <div>
+      <span>Invitados máximos</span>
+      <strong>${totalAllowed}</strong>
+    </div>
+    <div>
+      <span>Confirmados</span>
+      <strong>${totalConfirmed}</strong>
+    </div>
+    <div>
+      <span>No asistirán</span>
+      <strong>${declinedGuests.length}</strong>
+    </div>
+  `;
 }
 
 function renderGuestEditor(index) {
@@ -233,6 +324,16 @@ function setupAdmin() {
   const downloadCsv = document.querySelector("#downloadCsv");
   const clearGuests = document.querySelector("#clearGuests");
   const guestList = document.querySelector("#guestList");
+  const whatsappNumberInput = document.querySelector("#whatsappNumberInput");
+
+  whatsappNumberInput.value = getWhatsappNumber();
+  whatsappNumberInput.addEventListener("change", () => {
+    const cleanNumber = whatsappNumberInput.value.replace(/[^\d]/g, "");
+    whatsappNumberInput.value = cleanNumber;
+    window.localStorage.setItem(WHATSAPP_STORAGE_KEY, cleanNumber || DEFAULT_WHATSAPP_NUMBER);
+    setPersonalInvitation();
+    renderGuests();
+  });
 
   openAdmin.addEventListener("click", () => {
     const password = window.prompt("Contraseña del panel de novios");
@@ -329,13 +430,19 @@ function setupAdmin() {
   });
 
   downloadCsv.addEventListener("click", () => {
-    const header = ["nombre", "pases", "nota", "link"];
-    const rows = readGuests().map((guest) => [
-      guest.name,
-      normalizePasses(guest.passes),
-      guest.note || "",
-      createGuestUrl(guest),
-    ]);
+    const rsvps = readRsvps();
+    const header = ["nombre", "pases", "nota", "confirmacion", "asistiran", "link"];
+    const rows = readGuests().map((guest) => {
+      const rsvp = rsvps[guest.name];
+      return [
+        guest.name,
+        normalizePasses(guest.passes),
+        guest.note || "",
+        rsvp?.status === "yes" ? "si" : rsvp?.status === "no" ? "no" : "",
+        rsvp?.status === "yes" ? normalizePasses(rsvp.attending, 0) : 0,
+        createGuestUrl(guest),
+      ];
+    });
     const csv = [header, ...rows].map((row) => row.map(escapeCsv).join(",")).join("\n");
     downloadFile("links-invitados-daniela-juan-jose.csv", csv, "text/csv;charset=utf-8");
   });
