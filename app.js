@@ -1,9 +1,7 @@
 const STORAGE_KEY = "danielaJuanJoseWeddingGuests";
 const RSVP_STORAGE_KEY = "danielaJuanJoseWeddingRsvps";
-const WHATSAPP_STORAGE_KEY = "danielaJuanJoseWeddingWhatsapp";
 const DEFAULT_INVITATION_PASSES = 4;
 const ADMIN_PASSWORD = "Dani&JuanJoPorSiempre";
-const DEFAULT_WHATSAPP_NUMBER = "50212345678";
 
 const defaultGuests = [
   { name: "Familia Garcia", passes: 4, note: "Ejemplo familiar" },
@@ -13,7 +11,6 @@ const defaultGuests = [
 const params = new URLSearchParams(window.location.search);
 const guestName = params.get("invitado") || "Invitado especial";
 const guestPasses = normalizePasses(params.get("pases"), DEFAULT_INVITATION_PASSES);
-const guestWhatsappNumber = params.get("whatsapp")?.replace(/[^\d]/g, "") || "";
 
 function getBaseUrl() {
   return `${window.location.origin}${window.location.pathname}`;
@@ -26,10 +23,6 @@ function normalizePasses(value, fallback = 1) {
 
 function pluralizePerson(count) {
   return count === 1 ? "1 persona" : `${count} personas`;
-}
-
-function getWhatsappNumber() {
-  return guestWhatsappNumber || window.localStorage.getItem(WHATSAPP_STORAGE_KEY) || DEFAULT_WHATSAPP_NUMBER;
 }
 
 function readRsvps() {
@@ -57,11 +50,18 @@ function saveRsvp(status, attending = 0) {
   window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(rsvps));
 }
 
+function showRsvpFeedback(message) {
+  const feedback = document.querySelector("#rsvpFeedback");
+  if (feedback) {
+    feedback.textContent = message;
+  }
+  renderAdminSummary();
+}
+
 function createGuestUrl(guest) {
   const url = new URL(getBaseUrl());
   url.searchParams.set("invitado", guest.name);
   url.searchParams.set("pases", String(normalizePasses(guest.passes)));
-  url.searchParams.set("whatsapp", getWhatsappNumber());
   if (guest.note) {
     url.searchParams.set("nota", guest.note);
   }
@@ -96,25 +96,15 @@ function setPersonalInvitation() {
   }).join("");
   attendingCount.value = String(guestPasses);
 
-  function updateWhatsappLinks() {
-    const selectedCount = normalizePasses(attendingCount.value, guestPasses);
-    const whatsappNumber = getWhatsappNumber();
-    const yesMessage = `Hola, confirmo mi asistencia a la boda de Daniela y Juan José. Invitado: ${guestName}. Asistiremos ${pluralizePerson(selectedCount)} de ${pluralizePerson(guestPasses)} disponibles.`;
-    const noMessage = `Hola, muchas gracias por la invitación a la boda de Daniela y Juan José. Invitado: ${guestName}. No podremos asistir.`;
-
-    document.querySelector("#yesRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(yesMessage)}`;
-    document.querySelector("#noRsvpLink").href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(noMessage)}`;
-  }
-
-  attendingCount.addEventListener("change", updateWhatsappLinks);
   document.querySelector("#yesRsvpLink").addEventListener("click", () => {
-    saveRsvp("yes", normalizePasses(attendingCount.value, guestPasses));
+    const selectedCount = normalizePasses(attendingCount.value, guestPasses);
+    saveRsvp("yes", selectedCount);
+    showRsvpFeedback(`Confirmación guardada: asistirán ${pluralizePerson(selectedCount)}.`);
   });
   document.querySelector("#noRsvpLink").addEventListener("click", () => {
     saveRsvp("no", 0);
+    showRsvpFeedback("Confirmación guardada: no podrán asistir.");
   });
-
-  updateWhatsappLinks();
 }
 
 function setupStory() {
@@ -324,16 +314,6 @@ function setupAdmin() {
   const downloadCsv = document.querySelector("#downloadCsv");
   const clearGuests = document.querySelector("#clearGuests");
   const guestList = document.querySelector("#guestList");
-  const whatsappNumberInput = document.querySelector("#whatsappNumberInput");
-
-  whatsappNumberInput.value = getWhatsappNumber();
-  whatsappNumberInput.addEventListener("change", () => {
-    const cleanNumber = whatsappNumberInput.value.replace(/[^\d]/g, "");
-    whatsappNumberInput.value = cleanNumber;
-    window.localStorage.setItem(WHATSAPP_STORAGE_KEY, cleanNumber || DEFAULT_WHATSAPP_NUMBER);
-    setPersonalInvitation();
-    renderGuests();
-  });
 
   openAdmin.addEventListener("click", () => {
     const password = window.prompt("Contraseña del panel de novios");
