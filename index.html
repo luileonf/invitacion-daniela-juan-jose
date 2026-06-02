@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=16" />
+    <link rel="stylesheet" href="./styles.css?v=17" />
   </head>
   <body>
     <main class="experience" id="inicio">
@@ -42,13 +42,17 @@
               <div class="card-ornament top" aria-hidden="true"></div>
               <p class="overline">Con la bendición de Dios<br />y de nuestros padres</p>
               <div class="parents-grid">
-                <p>Ingrid y Alejandro</p>
+                <p>Alejandro e Ingrid</p>
                 <p>Juan José y Karla</p>
               </div>
-              <h1>Daniela <span>&</span> Juan José</h1>
-              <p class="script-copy">Tenemos el honor de invitarlos a celebrar nuestro matrimonio</p>
-              <p class="date-line">Sábado 15 de agosto de 2026</p>
-              <p class="time-line">17:00 hrs</p>
+              <h1 class="couple-names">
+                <span class="name-line">Daniela</span>
+                <span class="ampersand">&</span>
+                <span class="name-line">Juan José</span>
+              </h1>
+              <p class="script-copy">Tenemos el honor de invitarlos<br />a celebrar nuestro matrimonio</p>
+              <p class="date-line">15 de agosto de 2026</p>
+              <p class="time-line">16:30 hrs</p>
               <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
@@ -70,7 +74,7 @@
             <div class="embossed-frame">
               <div class="card-ornament top" aria-hidden="true"></div>
               <h2>Su presencia en este día tan especial es nuestro mayor regalo</h2>
-              <p>
+              <p class="registry-copy">
                 Si desean tener un detalle con nosotros, agradeceremos que sea en efectivo
                 para ayudarnos a iniciar esta nueva etapa juntos.
               </p>
@@ -81,8 +85,7 @@
           <article class="story-card rsvp-card" data-step="3">
             <div class="embossed-frame">
               <div class="card-ornament top" aria-hidden="true"></div>
-              <p class="script-label">Confirmación de asistencia</p>
-              <h2>¿Nos acompañas?</h2>
+              <h2 class="rsvp-title">RSVP</h2>
               <p class="valid-for">Invitación para <strong id="confirmationPassCount">4 personas</strong></p>
               <label class="attendance-field">
                 Personas que asistirán
@@ -93,7 +96,7 @@
                 <button class="button secondary" id="noRsvpLink" type="button">No podré asistir</button>
               </div>
               <p class="rsvp-feedback" id="rsvpFeedback" aria-live="polite"></p>
-              <p class="deadline">Favor confirmar antes del 30 de julio.</p>
+              <p class="deadline">Favor confirmar antes del 30 de junio.</p>
               <div class="card-ornament bottom" aria-hidden="true"></div>
             </div>
           </article>
@@ -161,6 +164,6 @@
       </section>
     </main>
 
-    <script src="./app.js?v=14"></script>
+    <script src="./app.js?v=15"></script>
   </body>
 </html>
