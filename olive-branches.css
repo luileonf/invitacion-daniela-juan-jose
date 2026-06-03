@@ -1,0 +1,53 @@
+.embossed-frame {
+  isolation: isolate;
+}
+
+.card-ornament {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  width: clamp(168px, 34%, 270px);
+  height: clamp(82px, 13vw, 120px);
+  flex: 0 0 auto;
+  pointer-events: none;
+  opacity: 0.72;
+  background-image: url("data:image/svg+xml,%3Csvg width='300' height='135' viewBox='0 0 300 135' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 93C76 47 145 28 281 22' stroke='%23606f4c' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M36 80C29 62 35 48 55 41C62 59 57 73 36 80Z' fill='%235f744e' fill-opacity='.82'/%3E%3Cpath d='M63 63C58 45 66 32 86 27C91 46 84 58 63 63Z' fill='%2381916a' fill-opacity='.72'/%3E%3Cpath d='M92 51C90 33 100 22 120 20C123 38 113 48 92 51Z' fill='%23576b47' fill-opacity='.8'/%3E%3Cpath d='M126 41C126 23 139 15 158 16C158 34 146 42 126 41Z' fill='%2382946c' fill-opacity='.7'/%3E%3Cpath d='M162 34C166 17 181 12 199 17C195 34 181 39 162 34Z' fill='%235e714d' fill-opacity='.78'/%3E%3Cpath d='M202 28C209 12 224 10 241 18C234 34 219 36 202 28Z' fill='%23879870' fill-opacity='.72'/%3E%3Cpath d='M241 24C250 10 266 10 281 21C272 35 256 35 241 24Z' fill='%235c704b' fill-opacity='.82'/%3E%3Cpath d='M53 83C65 98 65 113 49 125C37 110 38 95 53 83Z' fill='%2385936d' fill-opacity='.62'/%3E%3Cpath d='M84 66C98 79 101 94 87 108C73 94 71 80 84 66Z' fill='%235b704b' fill-opacity='.74'/%3E%3Cpath d='M117 53C132 65 137 80 124 96C109 83 105 69 117 53Z' fill='%23809169' fill-opacity='.64'/%3E%3Cpath d='M153 42C169 52 176 66 165 83C149 72 142 59 153 42Z' fill='%235b7049' fill-opacity='.76'/%3E%3Cpath d='M192 34C209 41 218 54 210 73C193 65 184 53 192 34Z' fill='%2386946d' fill-opacity='.65'/%3E%3Cpath d='M233 28C251 32 262 44 256 64C238 59 227 47 233 28Z' fill='%235a6d49' fill-opacity='.77'/%3E%3Cellipse cx='22' cy='92' rx='5' ry='7' fill='%23909a69' fill-opacity='.72'/%3E%3Cellipse cx='277' cy='22' rx='5' ry='7' fill='%238f9864' fill-opacity='.72'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.embossed-frame > :not(.card-ornament) {
+  position: relative;
+  z-index: 1;
+}
+
+.card-ornament.top {
+  top: clamp(14px, 3.4vw, 34px);
+  left: clamp(12px, 3vw, 34px);
+  transform: rotate(-7deg);
+}
+
+.card-ornament.bottom {
+  right: clamp(12px, 3vw, 34px);
+  bottom: clamp(12px, 3vw, 32px);
+  transform: rotate(180deg);
+}
+
+@media (max-width: 760px) {
+  .card-ornament {
+    width: clamp(142px, 44vw, 190px);
+    height: clamp(70px, 23vw, 92px);
+    opacity: 0.66;
+  }
+
+  .card-ornament.top {
+    top: 12px;
+    left: 6px;
+  }
+
+  .card-ornament.bottom {
+    right: 6px;
+    bottom: 10px;
+  }
+}
