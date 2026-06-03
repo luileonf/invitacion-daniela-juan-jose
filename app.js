@@ -1,5 +1,6 @@
 const STORAGE_KEY = "danielaJuanJoseWeddingGuests";
 const RSVP_STORAGE_KEY = "danielaJuanJoseWeddingRsvps";
+const ADMIN_SESSION_KEY = "danielaJuanJoseAdminUnlocked";
 const DEFAULT_INVITATION_PASSES = 4;
 const ADMIN_PASSWORD = "Dani&JuanJoPorSiempre";
 
@@ -39,6 +40,10 @@ function readRsvps() {
   }
 }
 
+function saveRsvps(rsvps) {
+  window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(rsvps));
+}
+
 function saveRsvp(status, attending = 0) {
   const rsvps = readRsvps();
   rsvps[guestName] = {
@@ -47,7 +52,7 @@ function saveRsvp(status, attending = 0) {
     allowed: guestPasses,
     updatedAt: new Date().toISOString(),
   };
-  window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(rsvps));
+  saveRsvps(rsvps);
 }
 
 function showRsvpFeedback(message) {
@@ -239,6 +244,7 @@ function renderGuests() {
           <div class="guest-card-actions">
             <button class="copy-link" type="button" data-index="${index}">Copiar link</button>
             <button class="edit-guest" type="button" data-index="${index}">Editar</button>
+            <button class="cancel-edit delete-guest" type="button" data-index="${index}">Eliminar</button>
           </div>
         </article>
       `;
@@ -253,23 +259,44 @@ function renderAdminSummary() {
   }
   const guests = readGuests();
   const rsvps = readRsvps();
-  const totalAllowed = guests.reduce((sum, guest) => sum + normalizePasses(guest.passes), 0);
-  const confirmedGuests = Object.values(rsvps).filter((rsvp) => rsvp.status === "yes");
-  const declinedGuests = Object.values(rsvps).filter((rsvp) => rsvp.status === "no");
-  const totalConfirmed = confirmedGuests.reduce((sum, rsvp) => sum + normalizePasses(rsvp.attending, 0), 0);
+  const totals = guests.reduce(
+    (sum, guest) => {
+      const allowed = normalizePasses(guest.passes, DEFAULT_INVITATION_PASSES);
+      const rsvp = rsvps[guest.name];
+
+      if (!rsvp) {
+        sum.notConfirmed += allowed;
+        return sum;
+      }
+
+      if (rsvp.status === "yes") {
+        const attending = Math.min(normalizePasses(rsvp.attending, 0), allowed);
+        sum.confirmed += attending;
+        sum.notAttending += Math.max(allowed - attending, 0);
+        return sum;
+      }
+
+      if (rsvp.status === "no") {
+        sum.notAttending += allowed;
+      }
+
+      return sum;
+    },
+    { confirmed: 0, notConfirmed: 0, notAttending: 0 },
+  );
 
   summary.innerHTML = `
     <div>
-      <span>Invitados máximos</span>
-      <strong>${totalAllowed}</strong>
+      <span>Invitados confirmados</span>
+      <strong>${totals.confirmed}</strong>
     </div>
     <div>
-      <span>Confirmados</span>
-      <strong>${totalConfirmed}</strong>
+      <span>No confirmados</span>
+      <strong>${totals.notConfirmed}</strong>
     </div>
     <div>
       <span>No asistirán</span>
-      <strong>${declinedGuests.length}</strong>
+      <strong>${totals.notAttending}</strong>
     </div>
   `;
 }
@@ -315,11 +342,20 @@ function setupAdmin() {
   const clearGuests = document.querySelector("#clearGuests");
   const guestList = document.querySelector("#guestList");
 
+  function openAdminPanel(options = {}) {
+    const { smooth = true } = options;
+    adminPanel.hidden = false;
+    window.sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+    if (window.location.hash !== "#adminPanel") {
+      window.history.replaceState(null, "", "#adminPanel");
+    }
+    adminPanel.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  }
+
   openAdmin.addEventListener("click", () => {
     const password = window.prompt("Contraseña del panel de novios");
     if (password === ADMIN_PASSWORD) {
-      adminPanel.hidden = false;
-      adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      openAdminPanel();
       return;
     }
     if (password !== null) {
@@ -359,10 +395,11 @@ function setupAdmin() {
   });
 
   guestList.addEventListener("click", async (event) => {
-    const copyButton = event.target.closest(".copy-link");
+    const copyButton = event.target.closest(".copy-link:not(.delete-guest)");
     const editButton = event.target.closest(".edit-guest");
+    const deleteButton = event.target.closest(".delete-guest");
     const saveButton = event.target.closest(".save-guest");
-    const cancelButton = event.target.closest(".cancel-edit");
+    const cancelButton = event.target.closest(".cancel-edit:not(.delete-guest)");
 
     if (copyButton) {
       const guest = readGuests()[Number(copyButton.dataset.index)];
@@ -379,16 +416,46 @@ function setupAdmin() {
       return;
     }
 
+    if (deleteButton) {
+      const index = Number(deleteButton.dataset.index);
+      const guests = readGuests();
+      const guest = guests[index];
+      if (!guest) {
+        return;
+      }
+      if (window.confirm(`¿Quieres eliminar a ${guest.name} de la lista?`)) {
+        guests.splice(index, 1);
+        saveGuests(guests);
+        const rsvps = readRsvps();
+        delete rsvps[guest.name];
+        saveRsvps(rsvps);
+        renderGuests();
+      }
+      return;
+    }
+
     if (saveButton) {
       const index = Number(saveButton.dataset.index);
       const card = saveButton.closest(".guest-card");
       const guests = readGuests();
-      guests[index] = {
+      const previousName = guests[index]?.name;
+      const updatedGuest = {
         name: card.querySelector(".edit-name").value.trim(),
         passes: normalizePasses(card.querySelector(".edit-passes").value),
         note: card.querySelector(".edit-note").value.trim(),
       };
+      guests[index] = updatedGuest;
       saveGuests(guests.filter((guest) => guest.name));
+
+      if (previousName && previousName !== updatedGuest.name) {
+        const rsvps = readRsvps();
+        if (rsvps[previousName] && !rsvps[updatedGuest.name]) {
+          rsvps[updatedGuest.name] = rsvps[previousName];
+        }
+        delete rsvps[previousName];
+        saveRsvps(rsvps);
+      }
+
       renderGuests();
       return;
     }
@@ -430,9 +497,14 @@ function setupAdmin() {
   clearGuests.addEventListener("click", () => {
     if (window.confirm("¿Quieres borrar la lista de invitados guardada en este navegador?")) {
       saveGuests([]);
+      saveRsvps({});
       renderGuests();
     }
   });
+
+  if (window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "true" && window.location.hash === "#adminPanel") {
+    openAdminPanel({ smooth: false });
+  }
 
   renderGuests();
 }
