@@ -1,0 +1,90 @@
+.story-card.invitation-card {
+  width: min(540px, 100%);
+  min-height: auto;
+  aspect-ratio: 9 / 16;
+  padding: clamp(12px, 2vw, 20px);
+}
+
+.invitation-card .embossed-frame {
+  justify-content: flex-start;
+  gap: clamp(12px, 1.7vw, 22px);
+  padding: clamp(98px, 13vw, 136px) clamp(30px, 5vw, 52px) clamp(104px, 13vw, 142px);
+}
+
+.card-ornament {
+  width: clamp(154px, 18vw, 230px);
+  height: clamp(154px, 18vw, 230px);
+  opacity: 0.84;
+}
+
+.card-ornament.top {
+  top: clamp(8px, 2.4vw, 28px);
+  left: 50%;
+  transform: translateX(-50%) rotate(116deg);
+}
+
+.card-ornament.bottom {
+  right: auto;
+  bottom: clamp(8px, 2.6vw, 34px);
+  left: 50%;
+  transform: translateX(-50%) rotate(-64deg);
+}
+
+@media (min-width: 761px) {
+  .story-card.invitation-card {
+    width: min(560px, calc(100vh * 0.62), 100%);
+  }
+
+  .story-card:not(.invitation-card) {
+    width: min(700px, 100%);
+    min-height: min(760px, calc(100vh - 136px));
+  }
+
+  .invitation-card .overline {
+    margin-top: clamp(8px, 2vh, 20px);
+  }
+
+  .invitation-card h1 {
+    font-size: clamp(58px, min(7.2vw, 8.8vh), 82px);
+  }
+}
+
+@media (max-width: 760px) {
+  .story-card.invitation-card {
+    width: min(100%, 430px);
+    aspect-ratio: 9 / 16;
+    padding: 10px;
+  }
+
+  .invitation-card .embossed-frame {
+    min-height: auto;
+    padding: clamp(82px, 23vw, 112px) 14px clamp(86px, 24vw, 116px);
+    gap: clamp(11px, 3.2vw, 15px);
+  }
+
+  .card-ornament {
+    width: clamp(136px, 42vw, 178px);
+    height: clamp(136px, 42vw, 178px);
+    opacity: 0.82;
+  }
+
+  .card-ornament.top {
+    top: clamp(0px, 2vw, 10px);
+  }
+
+  .card-ornament.bottom {
+    bottom: clamp(0px, 2vw, 12px);
+  }
+}
+
+@media (max-width: 390px) {
+  .invitation-card .embossed-frame {
+    padding-top: 76px;
+    padding-bottom: 80px;
+  }
+
+  .card-ornament {
+    width: 132px;
+    height: 132px;
+  }
+}
