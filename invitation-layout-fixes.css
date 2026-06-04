@@ -1,8 +1,18 @@
+.story-card {
+  width: min(620px, calc(100vw - 56px)) !important;
+  min-height: auto !important;
+  aspect-ratio: 9 / 16;
+  padding: clamp(14px, 2vw, 24px);
+}
+
 .story-card .embossed-frame {
   box-sizing: border-box;
+  min-height: 100%;
+  height: 100%;
+  justify-content: center;
   overflow: hidden;
-  padding-top: clamp(132px, 13vw, 178px);
-  padding-bottom: clamp(132px, 13vw, 178px);
+  gap: clamp(14px, 1.8vw, 22px);
+  padding: clamp(132px, 13vw, 178px) clamp(34px, 5vw, 58px);
 }
 
 .story-card .embossed-frame > :not(.card-ornament) {
@@ -16,8 +26,8 @@
   position: absolute !important;
   display: block !important;
   visibility: visible !important;
-  width: clamp(158px, 16vw, 220px) !important;
-  height: clamp(158px, 16vw, 220px) !important;
+  width: clamp(150px, 15vw, 210px) !important;
+  height: clamp(150px, 15vw, 210px) !important;
   opacity: 0.82 !important;
   z-index: 2 !important;
   background-repeat: no-repeat !important;
@@ -27,7 +37,7 @@
 }
 
 .story-card .card-ornament.top {
-  top: clamp(22px, 3vw, 42px) !important;
+  top: clamp(20px, 3vw, 40px) !important;
   right: auto !important;
   bottom: auto !important;
   left: 50% !important;
@@ -37,23 +47,9 @@
 .story-card .card-ornament.bottom {
   top: auto !important;
   right: auto !important;
-  bottom: clamp(22px, 3vw, 42px) !important;
+  bottom: clamp(20px, 3vw, 40px) !important;
   left: 50% !important;
   transform: translateX(-50%) rotate(-64deg) !important;
-}
-
-.story-card.invitation-card {
-  width: min(700px, 100%);
-  min-height: auto;
-  aspect-ratio: auto;
-  padding: clamp(14px, 2vw, 24px);
-}
-
-.invitation-card .embossed-frame {
-  min-height: 980px;
-  justify-content: center;
-  gap: clamp(14px, 1.8vw, 22px);
-  padding: clamp(150px, 14vw, 188px) clamp(38px, 6vw, 66px);
 }
 
 .invitation-card .couple-names .name-line {
@@ -61,55 +57,51 @@
 }
 
 @media (min-width: 761px) {
-  .story-card.invitation-card {
-    width: min(720px, calc(100vw - 56px));
-  }
-
-  .story-card:not(.invitation-card) {
-    width: min(700px, 100%);
-    min-height: min(760px, calc(100vh - 136px));
-  }
-
-  .story-card:not(.invitation-card) .embossed-frame {
-    min-height: 100%;
-    justify-content: center;
+  .story-card {
+    width: min(620px, calc(100vw - 56px)) !important;
   }
 
   .invitation-card .overline {
     max-width: none;
     margin-top: 0;
-    font-size: clamp(18px, 1.65vw, 24px);
+    font-size: clamp(18px, 1.45vw, 23px);
     line-height: 1.65;
     white-space: nowrap;
   }
 
   .invitation-card .parents-grid {
-    width: min(560px, 100%);
-    gap: clamp(34px, 5vw, 72px);
+    width: min(520px, 100%);
+    gap: clamp(30px, 4vw, 62px);
   }
 
   .invitation-card .parents-grid p {
-    font-size: clamp(20px, 1.9vw, 26px);
+    font-size: clamp(19px, 1.65vw, 24px);
     white-space: nowrap;
   }
 
   .invitation-card h1 {
-    font-size: clamp(72px, 6.4vw, 94px);
+    font-size: clamp(66px, 5.6vw, 86px);
   }
 
   .invitation-card .script-copy {
-    font-size: clamp(20px, 1.8vw, 25px);
+    font-size: clamp(19px, 1.6vw, 24px);
   }
 
   .invitation-card .date-line {
-    font-size: clamp(22px, 2vw, 29px);
+    font-size: clamp(21px, 1.8vw, 27px);
   }
 }
 
 @media (max-width: 760px) {
+  .story-card {
+    width: min(100%, 430px) !important;
+    aspect-ratio: 9 / 16;
+    padding: 10px;
+  }
+
   .story-card .embossed-frame {
-    padding-top: clamp(98px, 24vw, 128px);
-    padding-bottom: clamp(98px, 24vw, 128px);
+    padding: clamp(98px, 24vw, 128px) 14px clamp(104px, 27vw, 136px);
+    gap: clamp(10px, 3vw, 14px);
   }
 
   .story-card .card-ornament,
@@ -125,31 +117,14 @@
   }
 
   .story-card .card-ornament.bottom {
-    bottom: clamp(12px, 4vw, 24px) !important;
-  }
-
-  .story-card.invitation-card {
-    width: min(100%, 430px);
-    aspect-ratio: 9 / 16;
-    padding: 10px;
-  }
-
-  .invitation-card .embossed-frame {
-    min-height: 100%;
-    justify-content: center;
-    padding: clamp(92px, 23vw, 118px) 14px clamp(104px, 27vw, 136px);
-    gap: clamp(10px, 3vw, 14px);
-  }
-
-  .invitation-card .card-ornament.bottom {
-    bottom: clamp(24px, 8vw, 48px) !important;
+    bottom: clamp(18px, 6vw, 36px) !important;
   }
 }
 
 @media (max-width: 390px) {
   .story-card .embossed-frame {
     padding-top: 88px;
-    padding-bottom: 92px;
+    padding-bottom: 104px;
   }
 
   .story-card .card-ornament,
@@ -159,12 +134,7 @@
     height: 112px !important;
   }
 
-  .invitation-card .embossed-frame {
-    padding-top: 82px;
-    padding-bottom: 108px;
-  }
-
-  .invitation-card .card-ornament.bottom {
+  .story-card .card-ornament.bottom {
     bottom: 30px !important;
   }
 }
