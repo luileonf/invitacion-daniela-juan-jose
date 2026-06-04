@@ -1,3 +1,47 @@
+.story-card .embossed-frame {
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-top: clamp(132px, 13vw, 178px);
+  padding-bottom: clamp(132px, 13vw, 178px);
+}
+
+.story-card .embossed-frame > :not(.card-ornament) {
+  position: relative;
+  z-index: 3;
+}
+
+.story-card .card-ornament,
+.story-card .card-ornament.top,
+.story-card .card-ornament.bottom {
+  position: absolute !important;
+  display: block !important;
+  visibility: visible !important;
+  width: clamp(158px, 16vw, 220px) !important;
+  height: clamp(158px, 16vw, 220px) !important;
+  opacity: 0.82 !important;
+  z-index: 2 !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  pointer-events: none;
+}
+
+.story-card .card-ornament.top {
+  top: clamp(22px, 3vw, 42px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(116deg) !important;
+}
+
+.story-card .card-ornament.bottom {
+  top: auto !important;
+  right: auto !important;
+  bottom: clamp(22px, 3vw, 42px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(-64deg) !important;
+}
+
 .story-card.invitation-card {
   width: min(700px, 100%);
   min-height: auto;
@@ -6,48 +50,10 @@
 }
 
 .invitation-card .embossed-frame {
-  box-sizing: border-box;
   min-height: 980px;
-  justify-content: flex-start;
+  justify-content: center;
   gap: clamp(14px, 1.8vw, 22px);
-  padding: clamp(178px, 17vw, 220px) clamp(38px, 6vw, 66px) clamp(164px, 15vw, 210px);
-  overflow: hidden;
-}
-
-.invitation-card .embossed-frame > :not(.card-ornament) {
-  z-index: 3;
-}
-
-.invitation-card .card-ornament,
-.invitation-card .card-ornament.top,
-.invitation-card .card-ornament.bottom {
-  position: absolute !important;
-  display: block !important;
-  visibility: visible !important;
-  width: clamp(176px, 17vw, 238px) !important;
-  height: clamp(176px, 17vw, 238px) !important;
-  opacity: 0.84 !important;
-  z-index: 2 !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: contain !important;
-  pointer-events: none;
-}
-
-.invitation-card .card-ornament.top {
-  top: clamp(24px, 3.4vw, 44px) !important;
-  right: auto !important;
-  left: 50% !important;
-  bottom: auto !important;
-  transform: translateX(-50%) rotate(116deg) !important;
-}
-
-.invitation-card .card-ornament.bottom {
-  top: auto !important;
-  right: auto !important;
-  bottom: clamp(34px, 4.6vw, 66px) !important;
-  left: 50% !important;
-  transform: translateX(-50%) rotate(-64deg) !important;
+  padding: clamp(150px, 14vw, 188px) clamp(38px, 6vw, 66px);
 }
 
 .invitation-card .couple-names .name-line {
@@ -62,6 +68,11 @@
   .story-card:not(.invitation-card) {
     width: min(700px, 100%);
     min-height: min(760px, calc(100vh - 136px));
+  }
+
+  .story-card:not(.invitation-card) .embossed-frame {
+    min-height: 100%;
+    justify-content: center;
   }
 
   .invitation-card .overline {
@@ -96,6 +107,27 @@
 }
 
 @media (max-width: 760px) {
+  .story-card .embossed-frame {
+    padding-top: clamp(98px, 24vw, 128px);
+    padding-bottom: clamp(98px, 24vw, 128px);
+  }
+
+  .story-card .card-ornament,
+  .story-card .card-ornament.top,
+  .story-card .card-ornament.bottom {
+    width: clamp(112px, 32vw, 148px) !important;
+    height: clamp(112px, 32vw, 148px) !important;
+    opacity: 0.82 !important;
+  }
+
+  .story-card .card-ornament.top {
+    top: clamp(8px, 3vw, 18px) !important;
+  }
+
+  .story-card .card-ornament.bottom {
+    bottom: clamp(12px, 4vw, 24px) !important;
+  }
+
   .story-card.invitation-card {
     width: min(100%, 430px);
     aspect-ratio: 9 / 16;
@@ -104,41 +136,35 @@
 
   .invitation-card .embossed-frame {
     min-height: 100%;
-    padding: clamp(94px, 24vw, 124px) 14px clamp(112px, 28vw, 148px);
+    justify-content: center;
+    padding: clamp(92px, 23vw, 118px) 14px clamp(104px, 27vw, 136px);
     gap: clamp(10px, 3vw, 14px);
   }
 
-  .invitation-card .card-ornament,
-  .invitation-card .card-ornament.top,
   .invitation-card .card-ornament.bottom {
-    width: clamp(118px, 34vw, 158px) !important;
-    height: clamp(118px, 34vw, 158px) !important;
-    opacity: 0.82 !important;
-  }
-
-  .invitation-card .card-ornament.top {
-    top: clamp(8px, 3vw, 18px) !important;
-  }
-
-  .invitation-card .card-ornament.bottom {
-    bottom: clamp(36px, 12vw, 72px) !important;
+    bottom: clamp(24px, 8vw, 48px) !important;
   }
 }
 
 @media (max-width: 390px) {
+  .story-card .embossed-frame {
+    padding-top: 88px;
+    padding-bottom: 92px;
+  }
+
+  .story-card .card-ornament,
+  .story-card .card-ornament.top,
+  .story-card .card-ornament.bottom {
+    width: 112px !important;
+    height: 112px !important;
+  }
+
   .invitation-card .embossed-frame {
     padding-top: 82px;
-    padding-bottom: 104px;
-  }
-
-  .invitation-card .card-ornament,
-  .invitation-card .card-ornament.top,
-  .invitation-card .card-ornament.bottom {
-    width: 120px !important;
-    height: 120px !important;
+    padding-bottom: 108px;
   }
 
   .invitation-card .card-ornament.bottom {
-    bottom: 34px !important;
+    bottom: 30px !important;
   }
 }
