@@ -3,11 +3,15 @@ const RSVP_STORAGE_KEY = "danielaJuanJoseWeddingRsvps";
 const ADMIN_SESSION_KEY = "danielaJuanJoseAdminUnlocked";
 const DEFAULT_INVITATION_PASSES = 4;
 const ADMIN_PASSWORD = "Dani&JuanJoPorSiempre";
+const DATA_ENDPOINT = (window.WEDDING_DATA_ENDPOINT || "").trim();
 
-const defaultGuests = [
-  { name: "Familia Garcia", passes: 4, note: "Ejemplo familiar" },
-  { name: "Ana Lopez", passes: 1, note: "Ejemplo individual" },
-];
+const dataState = {
+  guests: [],
+  rsvps: {},
+  loaded: false,
+  remoteEnabled: Boolean(DATA_ENDPOINT),
+  lastError: "",
+};
 
 const params = new URLSearchParams(window.location.search);
 const guestName = params.get("invitado") || "Invitado especial";
@@ -26,25 +30,193 @@ function pluralizePerson(count) {
   return count === 1 ? "1 persona" : `${count} personas`;
 }
 
-function readRsvps() {
-  const saved = window.localStorage.getItem(RSVP_STORAGE_KEY);
+function readLocalJson(key, fallback) {
+  const saved = window.localStorage.getItem(key);
   if (!saved) {
-    return {};
+    return fallback;
   }
 
   try {
     const parsed = JSON.parse(saved);
-    return parsed && typeof parsed === "object" ? parsed : {};
+    return parsed ?? fallback;
   } catch {
-    return {};
+    return fallback;
   }
 }
 
-function saveRsvps(rsvps) {
-  window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(rsvps));
+function normalizeGuest(guest) {
+  return {
+    name: String(guest?.name || "").trim(),
+    passes: normalizePasses(guest?.passes, DEFAULT_INVITATION_PASSES),
+    note: String(guest?.note || "").trim(),
+  };
 }
 
-function saveRsvp(status, attending = 0) {
+function normalizeGuestList(guests) {
+  return Array.isArray(guests) ? guests.map(normalizeGuest).filter((guest) => guest.name) : [];
+}
+
+function normalizeRsvps(rsvps) {
+  if (!rsvps || typeof rsvps !== "object") {
+    return {};
+  }
+
+  return Object.entries(rsvps).reduce((result, [name, rsvp]) => {
+    const safeName = String(name || "").trim();
+    if (!safeName) {
+      return result;
+    }
+    result[safeName] = {
+      status: rsvp?.status === "no" ? "no" : "yes",
+      attending: normalizePasses(rsvp?.attending, 0),
+      allowed: normalizePasses(rsvp?.allowed, DEFAULT_INVITATION_PASSES),
+      updatedAt: rsvp?.updatedAt || new Date().toISOString(),
+    };
+    return result;
+  }, {});
+}
+
+function saveLocalBackup() {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(dataState.guests));
+  window.localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(dataState.rsvps));
+}
+
+function getLocalData() {
+  return {
+    guests: normalizeGuestList(readLocalJson(STORAGE_KEY, [])),
+    rsvps: normalizeRsvps(readLocalJson(RSVP_STORAGE_KEY, {})),
+  };
+}
+
+async function sharedRequest(payload) {
+  if (!DATA_ENDPOINT) {
+    throw new Error("No hay endpoint compartido configurado.");
+  }
+
+  const response = await fetch(DATA_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo conectar con la hoja compartida.");
+  }
+
+  const data = await response.json();
+  if (data.error) {
+    throw new Error(data.error);
+  }
+  return data;
+}
+
+async function loadSharedData() {
+  const localData = getLocalData();
+  dataState.guests = localData.guests;
+  dataState.rsvps = localData.rsvps;
+
+  if (!DATA_ENDPOINT) {
+    dataState.loaded = true;
+    dataState.lastError = "Aun falta configurar la URL del guardado compartido.";
+    return;
+  }
+
+  try {
+    const remoteData = await sharedRequest({ action: "getData" });
+    const remoteGuests = normalizeGuestList(remoteData.guests);
+    const remoteRsvps = normalizeRsvps(remoteData.rsvps);
+
+    const hasRemoteData = remoteGuests.length || Object.keys(remoteRsvps).length;
+    const hasLocalData = localData.guests.length || Object.keys(localData.rsvps).length;
+
+    if (!hasRemoteData && hasLocalData) {
+      dataState.guests = localData.guests;
+      dataState.rsvps = localData.rsvps;
+      await persistData({ silent: true });
+    } else {
+      dataState.guests = remoteGuests;
+      dataState.rsvps = remoteRsvps;
+      saveLocalBackup();
+    }
+
+    dataState.lastError = "";
+  } catch (error) {
+    dataState.remoteEnabled = false;
+    dataState.lastError = "No se pudo cargar la hoja compartida. Se usara respaldo local en este navegador.";
+  } finally {
+    dataState.loaded = true;
+  }
+}
+
+async function persistData(options = {}) {
+  const { silent = false } = options;
+  saveLocalBackup();
+
+  if (!DATA_ENDPOINT) {
+    dataState.lastError = "Aun falta configurar la URL del guardado compartido.";
+    if (!silent) {
+      updateSyncStatus();
+    }
+    return false;
+  }
+
+  try {
+    const saved = await sharedRequest({
+      action: "saveData",
+      guests: dataState.guests,
+      rsvps: dataState.rsvps,
+    });
+    dataState.guests = normalizeGuestList(saved.guests || dataState.guests);
+    dataState.rsvps = normalizeRsvps(saved.rsvps || dataState.rsvps);
+    saveLocalBackup();
+    dataState.remoteEnabled = true;
+    dataState.lastError = "";
+    if (!silent) {
+      updateSyncStatus("Guardado en la hoja compartida.");
+    }
+    return true;
+  } catch (error) {
+    dataState.remoteEnabled = false;
+    dataState.lastError = "No se pudo guardar en la hoja compartida. Quedo respaldo local en este navegador.";
+    if (!silent) {
+      updateSyncStatus();
+    }
+    return false;
+  }
+}
+
+async function refreshSharedData() {
+  if (!DATA_ENDPOINT) {
+    updateSyncStatus();
+    return;
+  }
+
+  try {
+    const remoteData = await sharedRequest({ action: "getData" });
+    dataState.guests = normalizeGuestList(remoteData.guests);
+    dataState.rsvps = normalizeRsvps(remoteData.rsvps);
+    saveLocalBackup();
+    dataState.remoteEnabled = true;
+    dataState.lastError = "";
+    renderGuests();
+    updateSyncStatus("Datos actualizados desde la hoja compartida.");
+  } catch {
+    dataState.remoteEnabled = false;
+    dataState.lastError = "No se pudo actualizar desde la hoja compartida.";
+    updateSyncStatus();
+  }
+}
+
+function readRsvps() {
+  return dataState.rsvps;
+}
+
+async function saveRsvps(rsvps) {
+  dataState.rsvps = normalizeRsvps(rsvps);
+  await persistData({ silent: true });
+}
+
+async function saveRsvp(status, attending = 0) {
   const rsvps = readRsvps();
   rsvps[guestName] = {
     status,
@@ -52,7 +224,8 @@ function saveRsvp(status, attending = 0) {
     allowed: guestPasses,
     updatedAt: new Date().toISOString(),
   };
-  saveRsvps(rsvps);
+  dataState.rsvps = rsvps;
+  return persistData({ silent: true });
 }
 
 function showRsvpFeedback(message) {
@@ -74,21 +247,12 @@ function createGuestUrl(guest) {
 }
 
 function readGuests() {
-  const saved = window.localStorage.getItem(STORAGE_KEY);
-  if (!saved) {
-    return defaultGuests;
-  }
-
-  try {
-    const parsed = JSON.parse(saved);
-    return Array.isArray(parsed) ? parsed : defaultGuests;
-  } catch {
-    return defaultGuests;
-  }
+  return dataState.guests;
 }
 
-function saveGuests(guests) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(guests));
+async function saveGuests(guests) {
+  dataState.guests = normalizeGuestList(guests);
+  await persistData();
 }
 
 function setPersonalInvitation() {
@@ -101,14 +265,24 @@ function setPersonalInvitation() {
   }).join("");
   attendingCount.value = String(guestPasses);
 
-  document.querySelector("#yesRsvpLink").addEventListener("click", () => {
+  document.querySelector("#yesRsvpLink").addEventListener("click", async () => {
     const selectedCount = normalizePasses(attendingCount.value, guestPasses);
-    saveRsvp("yes", selectedCount);
-    showRsvpFeedback(`Confirmación guardada: asistirán ${pluralizePerson(selectedCount)}.`);
+    showRsvpFeedback("Guardando confirmacion...");
+    const saved = await saveRsvp("yes", selectedCount);
+    showRsvpFeedback(
+      saved
+        ? `Confirmacion guardada: asistiran ${pluralizePerson(selectedCount)}.`
+        : "Confirmacion guardada en este navegador. Falta revisar la conexion compartida.",
+    );
   });
-  document.querySelector("#noRsvpLink").addEventListener("click", () => {
-    saveRsvp("no", 0);
-    showRsvpFeedback("Confirmación guardada: no podrán asistir.");
+  document.querySelector("#noRsvpLink").addEventListener("click", async () => {
+    showRsvpFeedback("Guardando confirmacion...");
+    const saved = await saveRsvp("no", 0);
+    showRsvpFeedback(
+      saved
+        ? "Confirmacion guardada: no podran asistir."
+        : "Confirmacion guardada en este navegador. Falta revisar la conexion compartida.",
+    );
   });
 }
 
@@ -184,7 +358,17 @@ function parseGuestList(text) {
 }
 
 async function copyText(text) {
-  await navigator.clipboard.writeText(text);
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.append(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
 }
 
 function downloadFile(filename, content, type) {
@@ -210,14 +394,34 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function updateSyncStatus(message = "") {
+  const status = document.querySelector("#syncStatus");
+  if (!status) {
+    return;
+  }
+
+  if (message) {
+    status.textContent = message;
+    return;
+  }
+
+  if (dataState.remoteEnabled) {
+    status.textContent = "Conectado a la hoja compartida.";
+    return;
+  }
+
+  status.textContent = dataState.lastError || "Modo local: aun falta configurar el guardado compartido.";
+}
+
 function renderGuests() {
   const list = document.querySelector("#guestList");
   const guests = readGuests();
   const rsvps = readRsvps();
   renderAdminSummary();
+  updateSyncStatus();
 
   if (!guests.length) {
-    list.innerHTML = `<div class="empty-state">Aún no hay invitados. Agrega uno manualmente o importa tu lista.</div>`;
+    list.innerHTML = `<div class="empty-state">Aun no hay invitados. Agrega uno manualmente o importa tu lista.</div>`;
     return;
   }
 
@@ -230,8 +434,8 @@ function renderGuests() {
       const rsvp = rsvps[guest.name];
       const rsvpText = rsvp
         ? rsvp.status === "yes"
-          ? `Confirmó ${pluralizePerson(normalizePasses(rsvp.attending, 0))}`
-          : "No asistirá"
+          ? `Confirmo ${pluralizePerson(normalizePasses(rsvp.attending, 0))}`
+          : "No asistira"
         : "Sin confirmar";
       return `
         <article class="guest-card" data-index="${index}">
@@ -295,7 +499,7 @@ function renderAdminSummary() {
       <strong>${totals.notConfirmed}</strong>
     </div>
     <div>
-      <span>No asistirán</span>
+      <span>No asistiran</span>
       <strong>${totals.notAttending}</strong>
     </div>
   `;
@@ -316,7 +520,7 @@ function renderGuestEditor(index) {
       <input class="edit-name" type="text" value="${escapeHtml(guest.name)}" />
     </label>
     <label>
-      Añadidos / pases
+      Añadidos / pases
       <input class="edit-passes" type="number" min="1" value="${normalizePasses(guest.passes)}" />
     </label>
     <label>
@@ -352,10 +556,11 @@ function setupAdmin() {
     adminPanel.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
   }
 
-  openAdmin.addEventListener("click", () => {
+  openAdmin.addEventListener("click", async () => {
     const password = window.prompt("Contraseña del panel de novios");
     if (password === ADMIN_PASSWORD) {
       openAdminPanel();
+      await refreshSharedData();
       return;
     }
     if (password !== null) {
@@ -363,7 +568,7 @@ function setupAdmin() {
     }
   });
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const guests = readGuests();
@@ -372,7 +577,7 @@ function setupAdmin() {
       passes: normalizePasses(formData.get("guestPasses")),
       note: String(formData.get("guestNote") || "").trim(),
     });
-    saveGuests(guests.filter((guest) => guest.name));
+    await saveGuests(guests.filter((guest) => guest.name));
     form.reset();
     document.querySelector("#guestPasses").value = DEFAULT_INVITATION_PASSES;
     renderGuests();
@@ -383,13 +588,13 @@ function setupAdmin() {
     if (!file) {
       return;
     }
-    saveGuests([...readGuests(), ...parseGuestList(await file.text())]);
+    await saveGuests([...readGuests(), ...parseGuestList(await file.text())]);
     csvInput.value = "";
     renderGuests();
   });
 
-  importPasted.addEventListener("click", () => {
-    saveGuests([...readGuests(), ...parseGuestList(pasteArea.value)]);
+  importPasted.addEventListener("click", async () => {
+    await saveGuests([...readGuests(), ...parseGuestList(pasteArea.value)]);
     pasteArea.value = "";
     renderGuests();
   });
@@ -425,10 +630,9 @@ function setupAdmin() {
       }
       if (window.confirm(`¿Quieres eliminar a ${guest.name} de la lista?`)) {
         guests.splice(index, 1);
-        saveGuests(guests);
-        const rsvps = readRsvps();
-        delete rsvps[guest.name];
-        saveRsvps(rsvps);
+        dataState.guests = normalizeGuestList(guests);
+        delete dataState.rsvps[guest.name];
+        await persistData();
         renderGuests();
       }
       return;
@@ -445,7 +649,7 @@ function setupAdmin() {
         note: card.querySelector(".edit-note").value.trim(),
       };
       guests[index] = updatedGuest;
-      saveGuests(guests.filter((guest) => guest.name));
+      dataState.guests = normalizeGuestList(guests);
 
       if (previousName && previousName !== updatedGuest.name) {
         const rsvps = readRsvps();
@@ -453,9 +657,10 @@ function setupAdmin() {
           rsvps[updatedGuest.name] = rsvps[previousName];
         }
         delete rsvps[previousName];
-        saveRsvps(rsvps);
+        dataState.rsvps = rsvps;
       }
 
+      await persistData();
       renderGuests();
       return;
     }
@@ -494,10 +699,11 @@ function setupAdmin() {
     downloadFile("links-invitados-daniela-juan-jose.csv", csv, "text/csv;charset=utf-8");
   });
 
-  clearGuests.addEventListener("click", () => {
-    if (window.confirm("¿Quieres borrar la lista de invitados guardada en este navegador?")) {
-      saveGuests([]);
-      saveRsvps({});
+  clearGuests.addEventListener("click", async () => {
+    if (window.confirm("¿Quieres borrar la lista de invitados y sus confirmaciones?")) {
+      dataState.guests = [];
+      dataState.rsvps = {};
+      await persistData();
       renderGuests();
     }
   });
@@ -509,6 +715,11 @@ function setupAdmin() {
   renderGuests();
 }
 
-setPersonalInvitation();
-setupStory();
-setupAdmin();
+async function initializeApp() {
+  await loadSharedData();
+  setPersonalInvitation();
+  setupStory();
+  setupAdmin();
+}
+
+initializeApp();
